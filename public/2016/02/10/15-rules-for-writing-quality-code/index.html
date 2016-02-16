@@ -509,14 +509,6 @@ Rule 13: Keep Your Code Portable</p>
 			</li>
 		
 			<li>
-				<a href="/tags/rss">
-				
-					rss
-				
-				</a>
-			</li>
-		
-			<li>
 				<a href="/tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8">
 				
 					软件品质
@@ -528,6 +520,14 @@ Rule 13: Keep Your Code Portable</p>
 				<a href="/tags/cookie">
 				
 					cookie
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/rss">
+				
+					rss
 				
 				</a>
 			</li>
@@ -555,7 +555,19 @@ Rule 13: Keep Your Code Portable</p>
 
 	</script>
 
-
+<script>
+(function(){
+	if(window.location.hostname === "localhost")
+	{
+		document.write("<h1>localhost, donot push to baidu</h1>");
+		return;
+	}
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
 </div>
 
 <script src="/js/prism.js" async></script>

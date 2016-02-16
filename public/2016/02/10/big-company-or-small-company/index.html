@@ -459,7 +459,19 @@ function isNewVisitor() {
 
 	</script>
 
-
+<script>
+(function(){
+	if(window.location.hostname === "localhost")
+	{
+		document.write("<h1>localhost, donot push to baidu</h1>");
+		return;
+	}
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
 </div>
 
 <script src="/js/prism.js" async></script>
