@@ -1,0 +1,31 @@
+<div itemscope itemtype="http://schema.org/Blog">
+	{{ $prevYear := "" }}
+	{{ $pages := .Data.Pages }}
+	{{ range $index, $page := .Data.Pages }}
+		{{ if eq .Type "post" }}
+
+		{{ if eq $index 0 }}
+		<section class="archives"><h1 class="year">{{ dateFormat "2006" .Date }}</h1>
+		{{ else }}
+			{{ $prev := (sub $index 1) }}
+			{{ $prevYear := (index $pages $prev).Date | dateFormat "2006" }}
+			{{ $curYear := (dateFormat "2006" .Date) }}
+
+			{{ if ne $prevYear $curYear }}
+				</section>
+				<section class="archives"><h1 class="year">{{ dateFormat "2006" .Date }}</h1>
+			{{ end }}
+		{{ end }}
+
+		<article >
+			<h3 itemprop="name" style="float:left"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+			<!--({{ .Date.Format "Jan 2, 2006" }})-->
+			<div style="color:grey;float:right;">{{ partial "post/date.html" . }}</div>
+			<div style="clear:both">{{.Summary}}</div>
+			<a href="{{ .Permalink }}" style="float:right;font-size:1.2em;clear:both">阅读全文 →</a>
+		</article>
+
+		{{ end }}
+	{{ end }}
+	</section>
+</div>

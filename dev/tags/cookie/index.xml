@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Cookie on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://localhost:1313/tags/cookie/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Mon, 07 Dec 2015 11:33:43 JST</updated>
+    
+    <item>
+      <title>用javascript&#43;cookie判断用户是否首次访问网站</title>
+      <link>http://localhost:1313/2015/12/07/javascript-new-visitor/</link>
+      <pubDate>Mon, 07 Dec 2015 11:33:43 JST</pubDate>
+      
+      <guid>http://localhost:1313/2015/12/07/javascript-new-visitor/</guid>
+      <description>
+
+&lt;p&gt;有时，针对首次访问网站的用户，需要弹出特定的消息。
+比如：本网站做了一个“向首次访问的用户做问卷调查”功能。&lt;/p&gt;
+
+&lt;p&gt;实现方法：
+在cookie里记录用户是否访问过的信息。通过javascript读写cookie。&lt;/p&gt;
+
+&lt;h2 id=&#34;什么是cookie:a1026216791776b42e031d658490c506&#34;&gt;什么是cookie？&lt;/h2&gt;
+
+&lt;p&gt;从安全角度考虑浏览器是不能直接写本地硬盘的。
+不过有些信息需要本地保存，就发明了cookie这么个东西。
+浏览器写入cookie的信息大小，可以写的cookie个数都有限制。
+另外，cookie是可以设置期限的。例如：30天期限的话，30天后这个cookie就无效了（被删除了吧）。&lt;/p&gt;
+
+&lt;p&gt;cookie的详细信息就请教google吧。&lt;/p&gt;
+
+&lt;h2 id=&#34;一个实现细节:a1026216791776b42e031d658490c506&#34;&gt;一个实现细节&lt;/h2&gt;
+
+&lt;p&gt;我在实现该功能的时候，仅当访客滚动页面快到底部时，才去判断用户是否首次访问。
+如果是首次访问，就弹出对话框（DIV）询问是否愿意配合做&lt;a href=&#34;https://www.wenjuan.com/s/AFbMJj/&#34;&gt;问卷调查&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;代码:a1026216791776b42e031d658490c506&#34;&gt;代码&lt;/h2&gt;
+
+&lt;p&gt;闲话少说吧，具体内容参见注释。
+如果有没写清楚地，麻烦留言。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+	// 绑定在页面滚动时间上的处理函数。每当用户滚动页面，这个函数都会被调用。
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position &amp;gt; 900 || // 仅当访客已经滚动一定范围（阅读一些内容）后
+		position &amp;gt; bottom*0.67 ) //当页面较小时，按照比例算
+		{
+			var newVisitor = isNewVisitor();// 如果是新访客
+			if(newVisitor === true)
+			{
+				// 动画弹出消息框
+				$(&amp;quot;#invite-questionnaire&amp;quot;).animate({right:&amp;quot;0&amp;quot;, bottom:&amp;quot;0&amp;quot;}, 100);
+
+				// 标记：已经向该访客弹出过消息。30天之内不要再弹
+				setCookie(&amp;quot;gznotes-visited&amp;quot;,&amp;quot;true&amp;quot;, 30);
+			}
+		}
+	});
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;	// 访客点击“没空”后，用这个函数隐藏消息框
+	function hideQuestionnaire()
+	{
+		$(&amp;quot;#invite-questionnaire&amp;quot;).css(&amp;quot;display&amp;quot;,&amp;quot;none&amp;quot;);
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function isNewVisitor() {
+    // 从cookie读取“已经向访客提示过消息”的标志位
+    var flg = getCookie(&amp;quot;gznotes-visited&amp;quot;);
+    if (flg === &amp;quot;&amp;quot;) {
+        return true;
+    } else {
+        return false;
+    }
+}
+// 写cookie
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = &amp;quot;expires=&amp;quot;+d.toUTCString();
+    document.cookie = cname + &amp;quot;=&amp;quot; + cvalue + &amp;quot;; &amp;quot; + expires +&amp;quot;;path=/&amp;quot;;
+} 
+// 读cookie
+function getCookie(cname) {
+    var name = cname + &amp;quot;=&amp;quot;;
+    var ca = document.cookie.split(&#39;;&#39;);
+    for(var i=0; i&amp;lt;ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==&#39; &#39;) c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return &amp;quot;&amp;quot;;
+} 
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

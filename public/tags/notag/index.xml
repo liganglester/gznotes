@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Notag on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://localhost:1313/tags/notag/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Wed, 10 Feb 2016 22:40:47 JST</updated>
+    
+    <item>
+      <title>15 Rules for Writing Quality Code</title>
+      <link>http://localhost:1313/2016/02/10/15-rules-for-writing-quality-code/</link>
+      <pubDate>Wed, 10 Feb 2016 22:40:47 JST</pubDate>
+      
+      <guid>http://localhost:1313/2016/02/10/15-rules-for-writing-quality-code/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,64 @@
+<div id="copyright-area">
+	Copyright &copy; {{ dateFormat "2006" .Now }}
+	{{ if $.Site.Author.name }}
+		{{ $.Site.Author.name }}
+	{{ else }}
+		{{ $.Site.Title }}
+	{{ end }}
+</div>
+<div id="footer-link-area">
+	{{ partial "google_analytics.html" . }}
+</div>
+
+<script src="/js/prism.js" async></script>
+<script type="text/javascript">
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position > 900 || // scroll far enough
+		position > bottom*0.67 ) //or over 2/3 of the page
+		{
+			var newVisitor = isNewVisitor();
+			if(newVisitor === true)
+			{
+				$("#invite-questionnaire").animate({right:"0", bottom:"0"}, 100);
+				setCookie("gznotes-visited","true", 30);
+			}
+		}
+		//$("#invite-questionnaire").text(bottom + ", " + position);
+	});
+	function hideQuestionnaire()
+	{
+		$("#invite-questionnaire").css("display","none");
+	}
+</script>
+<div id="invite-questionnaire">
+	<span>可否占用您30秒钟时间，请您给本站的改善提些意见？<a href="https://www.wenjuan.com/s/AFbMJj/">好</a></span><br>
+	<span>也可稍后点击页面底部“意见反馈”。<a href="#" onclick="hideQuestionnaire()">稍后再说</a></span>
+</div>
+<div><a href="#"><div id="gototop">回顶部</div></a></div>
+
+	<script type="text/javascript">
+	// from http://popdevelop.com/2010/08/touching-the-web/
+	// make the gototop div dragable on pad and phone 
+	$("#gototop").draggable();
+	
+	/* the show-nav-if-scroll-up feature sometimes annoying on iPhone.
+		partly because when you scroll to end, there will be a scroll up autoly.
+		var nLastYOffset = 0;// not know how to put this in a js file.. due to this var
+		$(window).scroll(function() {
+			if(window.pageYOffset > nLastYOffset ||
+			window.pageYOffset === 0)
+			{//scroll down or at top
+				$("#header-col").css("position","relative");
+			}
+			else if(window.pageYOffset > 200)
+			{
+				$("#header-col").css("position","fixed");
+				$("#header-col").css("left","0");
+				$("#header-col").css("top","0");
+				$("#header-col").css("z-index","10");
+			}
+			nLastYOffset = window.pageYOffset;
+		});*/
+	</script>

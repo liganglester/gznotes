@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Rss on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://localhost:1313/tags/rss/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Mon, 16 Nov 2015 21:42:29 JST</updated>
+    
+    <item>
+      <title>什么时候需要订阅RSS？</title>
+      <link>http://localhost:1313/2015/11/16/what-is-rss/</link>
+      <pubDate>Mon, 16 Nov 2015 21:42:29 JST</pubDate>
+      
+      <guid>http://localhost:1313/2015/11/16/what-is-rss/</guid>
+      <description>
+
+&lt;p&gt;简单讲，RSS是一种PULL方式的信息取得机制。
+如果你喜欢某网站的文章，但是又不想总来check有没有新文章，这个时候，订阅RSS就比较合适了。
+在浏览器自带的，或者专用的RSS Reader里就可以随时看到该网站最新的信息。&lt;/p&gt;
+
+&lt;h3 id=&#34;firefox里rss-reader的使用方法:163764c1ea2a98a424ec95eed0214ded&#34;&gt;Firefox里RSS Reader的使用方法&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/firefox-rss.jpg&#34; class=&#34;intext-left&#34;&gt;
+点击该网站的RSS订阅链接后，Firefox会提示是否订阅。
+订阅网站RSS后，在bookmark栏上增加了一个菜单项，类似于普通的bookmark。&lt;/p&gt;
+
+&lt;p&gt;点开后上面是文章列表，如图。灰色的是已经读过的。&lt;/p&gt;
+
+&lt;p&gt;以后随时点下这个bookmark就可以看到最新文章列表啦。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

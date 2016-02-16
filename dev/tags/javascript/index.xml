@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Javascript on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://localhost:1313/tags/javascript/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Mon, 07 Dec 2015 11:33:43 JST</updated>
+    
+    <item>
+      <title>用javascript&#43;cookie判断用户是否首次访问网站</title>
+      <link>http://localhost:1313/2015/12/07/javascript-new-visitor/</link>
+      <pubDate>Mon, 07 Dec 2015 11:33:43 JST</pubDate>
+      
+      <guid>http://localhost:1313/2015/12/07/javascript-new-visitor/</guid>
+      <description>
+
+&lt;p&gt;有时，针对首次访问网站的用户，需要弹出特定的消息。
+比如：本网站做了一个“向首次访问的用户做问卷调查”功能。&lt;/p&gt;
+
+&lt;p&gt;实现方法：
+在cookie里记录用户是否访问过的信息。通过javascript读写cookie。&lt;/p&gt;
+
+&lt;h2 id=&#34;什么是cookie:a1026216791776b42e031d658490c506&#34;&gt;什么是cookie？&lt;/h2&gt;
+
+&lt;p&gt;从安全角度考虑浏览器是不能直接写本地硬盘的。
+不过有些信息需要本地保存，就发明了cookie这么个东西。
+浏览器写入cookie的信息大小，可以写的cookie个数都有限制。
+另外，cookie是可以设置期限的。例如：30天期限的话，30天后这个cookie就无效了（被删除了吧）。&lt;/p&gt;
+
+&lt;p&gt;cookie的详细信息就请教google吧。&lt;/p&gt;
+
+&lt;h2 id=&#34;一个实现细节:a1026216791776b42e031d658490c506&#34;&gt;一个实现细节&lt;/h2&gt;
+
+&lt;p&gt;我在实现该功能的时候，仅当访客滚动页面快到底部时，才去判断用户是否首次访问。
+如果是首次访问，就弹出对话框（DIV）询问是否愿意配合做&lt;a href=&#34;https://www.wenjuan.com/s/AFbMJj/&#34;&gt;问卷调查&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;代码:a1026216791776b42e031d658490c506&#34;&gt;代码&lt;/h2&gt;
+
+&lt;p&gt;闲话少说吧，具体内容参见注释。
+如果有没写清楚地，麻烦留言。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+	// 绑定在页面滚动时间上的处理函数。每当用户滚动页面，这个函数都会被调用。
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position &amp;gt; 900 || // 仅当访客已经滚动一定范围（阅读一些内容）后
+		position &amp;gt; bottom*0.67 ) //当页面较小时，按照比例算
+		{
+			var newVisitor = isNewVisitor();// 如果是新访客
+			if(newVisitor === true)
+			{
+				// 动画弹出消息框
+				$(&amp;quot;#invite-questionnaire&amp;quot;).animate({right:&amp;quot;0&amp;quot;, bottom:&amp;quot;0&amp;quot;}, 100);
+
+				// 标记：已经向该访客弹出过消息。30天之内不要再弹
+				setCookie(&amp;quot;gznotes-visited&amp;quot;,&amp;quot;true&amp;quot;, 30);
+			}
+		}
+	});
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;	// 访客点击“没空”后，用这个函数隐藏消息框
+	function hideQuestionnaire()
+	{
+		$(&amp;quot;#invite-questionnaire&amp;quot;).css(&amp;quot;display&amp;quot;,&amp;quot;none&amp;quot;);
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function isNewVisitor() {
+    // 从cookie读取“已经向访客提示过消息”的标志位
+    var flg = getCookie(&amp;quot;gznotes-visited&amp;quot;);
+    if (flg === &amp;quot;&amp;quot;) {
+        return true;
+    } else {
+        return false;
+    }
+}
+// 写cookie
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = &amp;quot;expires=&amp;quot;+d.toUTCString();
+    document.cookie = cname + &amp;quot;=&amp;quot; + cvalue + &amp;quot;; &amp;quot; + expires +&amp;quot;;path=/&amp;quot;;
+} 
+// 读cookie
+function getCookie(cname) {
+    var name = cname + &amp;quot;=&amp;quot;;
+    var ca = document.cookie.split(&#39;;&#39;);
+    for(var i=0; i&amp;lt;ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==&#39; &#39;) c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return &amp;quot;&amp;quot;;
+} 
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>（译）JavaScript简史</title>
+      <link>http://localhost:1313/2015/11/06/javascript-brief-history/</link>
+      <pubDate>Fri, 06 Nov 2015 06:07:16 JST</pubDate>
+      
+      <guid>http://localhost:1313/2015/11/06/javascript-brief-history/</guid>
+      <description>
+
+&lt;p&gt;这篇文章是我练习翻译的，原文参见&lt;a href=&#34;http://foorious.com/articles/brief-history-of-javascript/&#34;&gt;英语原文地址&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;JavaScript这门编程语言很有传奇色彩。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;JavaScript is such a peculiar language.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;他是唯一一门基于prototype（而非class）的主流语言。很多人都对他有误解。人们曾经挺瞧不起这门语言，甚至争论他到底是不是一门真正的编程语言。可现在他正被广泛应用，包括在服务器端（node.js）。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;It’s &lt;strong&gt;the only mainstream language that uses prototypes instead of classes&lt;/strong&gt;. It’s widely misunderstood.
+Until a few years ago people would look down to it and even debate whether it was a real programming language or not—and now it’s used all over, including on servers (Node.js).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;JavaScript如今已经变成了一门至关重要的编程语言。
+他被广泛应用于各种联网设备，成为web平台（platform）的支柱和各种web/mobile应用（applications）的基础。借助于node.js，javascript在服务器端也大有用武之地，开始崭露头角。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;JavaScript has become an extremely important language. It’s ubiquitous in web-capable devices, a pillar of the Web Platform and the base for most web and mobile applications. Thanks to Node.js, it’s making its way on the server as well.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;为了理解javascript，咱们得先简单回顾一下浏览器和web的发展历程。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;To understand JavaScript, however, we have to take a little detour and go back to the history of browsers and the Web.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;关于web:8ab2a088cb75a2d5ac5127849d769cad&#34;&gt;关于Web&lt;/h3&gt;
+
+&lt;p&gt;1990年末，Tim Berners-Lee发明了World Wide Web.&lt;/p&gt;
+
+&lt;p&gt;internet和web这两个词虽然经常被互换使用，感觉没啥差别，其实他们并不是不是一个东西。internet指的是有形的网络本身，出现也大大早于web。而web（world wide web）是我们每天在看，在用的东西：一个由无数超文本（hypertext）文档连成的网络。通过浏览器或者其他专用程序，我们每天都在访问这个巨大网络里的信息。&lt;/p&gt;
+
+&lt;p&gt;internet刚刚出现后面临的一个问题是，由于电脑的差异性，虽然电脑可以互联，但是网络上的电脑却很可能无法互相沟通。这话放在21世纪说可能有点不可思议，不过早年标准化还没普及，好比虽然在海底铺了光缆，不懂外语的话，还是听不懂大洋对岸的洋人在说啥。一台电脑通过tcp/ip协议连接到另一台电脑了，但是文件格式不同，也就无法打开文件。这个问题导致虽然联网了电脑间很难协作和共享信息。&lt;/p&gt;
+
+&lt;p&gt;web就是用来解决这个问题，让当时的科学家可以互相共享信息。&lt;/p&gt;
+
+&lt;p&gt;解决方法具有革命性又很容易理解：把文档内容用一种通用语言（HTML）编码，然后用一个专门软件（浏览器）来解释，显示这个文档。每种电脑都有自己专门的浏览器，保证按照作者初衷正确显示文档，而文档本身保持不变。很简洁吧！&lt;/p&gt;
+
+&lt;p&gt;所以呢，Tim Berners-Lee发明了web、第一个web服务器、第一个web浏览器（名字就叫WorldWideWeb）、第一个网页编辑器（WorldWideWeb本身也是个网页编辑器）还有第一个网页（其中介绍了他的相关工作内容）。&lt;/p&gt;
+
+&lt;h3 id=&#34;browser-wars:8ab2a088cb75a2d5ac5127849d769cad&#34;&gt;Browser wars&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Mosaic&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Tim Berners-Lee （还有很多人）当时只是把web当成科学家和研究者的信息交换工具。幸运的是，还是有些人注意到了web更大的潜力。&lt;/p&gt;
+
+&lt;p&gt;一群伊利诺伊大学厄巴纳-香槟分校( University of Illinois Urbana-Champaign )的学生做出了Mosaic，这个浏览器软件另 World Wide Web流行起来。&lt;/p&gt;
+
+&lt;p&gt;原因可能有许多，不过主要的原因可能是他们没有束缚于 Berners-Lee的想法，更进一步增加了IMG tag（想想一个网页如果没有任何图片会多枯燥。译者注），这另网页作者可以做出更漂亮的网页。&lt;/p&gt;
+
+&lt;p&gt;这个浏览器软件广受欢迎，很快成为最流行的浏览器。Mosaic browser (1993)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Netscape Navigator&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;网景（ Netscape）公司挖走了Mosaic的创作者，让他们重新实现了一个浏览器，取名 Navigator。这个浏览器的生意让 Navigator 赚了一大笔钱。&lt;/p&gt;
+
+&lt;p&gt;人们之所以愿意花钱买 Navigator，是因为 Navigator更加突破了 Berners-Lee的想法，并且实现了很多人们需要的好东西（原文写的useless，应该是笔误吧），比如很多可选字体和其他一些我们今天已经是标配的东西。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Microsoft&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Navigator当时很酷的，在所有操作系统都有几近相同的显示效果。另一个当时非常棒的功能是，通过一个基于web的系统（ web-based system ）用户可以编辑网络上其他电脑上的文件，即使那台电脑使用不同的操作系统。&lt;/p&gt;
+
+&lt;p&gt;当然，微软容忍不了这个，因为这对windows业务不利。&lt;/p&gt;
+
+&lt;p&gt;所以，微软发布了 Internet Explorer并且免费提供。之后还开始了一场臭名卓著的浏览器之战（ browser wars ）。&lt;/p&gt;
+
+&lt;h3 id=&#34;javascript:8ab2a088cb75a2d5ac5127849d769cad&#34;&gt;JavaScript&lt;/h3&gt;
+
+&lt;p&gt;总算讲到正题了！&lt;/p&gt;
+
+&lt;p&gt;之后呢， Netscape就开发了 JavaScript，起初名字叫 LiveScript。&lt;/p&gt;
+
+&lt;p&gt;LiveScript对 Netscape 公司至关重要。他们想实现一种类似苹果公司 HyperCard 的产品并把它加到浏览器里（ HyperCard 是 Apple Macintosh and Apple IIGS 上的一款编程工具，另开发者更容易开发软件）。另外， LiveScript 也可以运行于服务器端。&lt;/p&gt;
+
+&lt;p&gt;这样， Netscape就可以用他们受欢迎的浏览器占据客户端业务市场，以及服务端市场。&lt;/p&gt;
+
+&lt;h3 id=&#34;java-scheme-and-self:8ab2a088cb75a2d5ac5127849d769cad&#34;&gt;Java, Scheme, and Self&lt;/h3&gt;
+
+&lt;p&gt;Netscape找到Brendan Eich来开发LiveScript。 Brendan Eich想基于Scheme开发LiveScript，可是Netscape的管理层认为人们不会喜欢 Scheme 的语法，让 Eich 把LiveScript设计得更像Java，Visual BASIC等当时受欢迎的语言。&lt;/p&gt;
+
+&lt;p&gt;所以呢，LiveScript借用了Java的语法(因为不得不这样)， Scheme语言的函数模型(function model)和Self语言的基于prototype的特性( prototypical nature )。&lt;/p&gt;
+
+&lt;p&gt;由于Netscape公司当时形式紧急， LiveScript语言从开始开发到发布只用了2个星期！！&lt;/p&gt;
+
+&lt;h3 id=&#34;sun-以及-javascript-名字的由来:8ab2a088cb75a2d5ac5127849d769cad&#34;&gt;Sun, 以及“JavaScript”名字的由来&lt;/h3&gt;
+
+&lt;p&gt;Netscape对微软的OS业务造成了威胁。微软开始采取动作后，Netscape找到了Sun联手进行反击。&lt;/p&gt;
+
+&lt;p&gt;Sun和Netscape达成协议过程中有件事很有意思，那就是关于怎么对待LiveScript。Sun想用Java取而代之，但是Netscape不舍得自己的这个宝。&lt;/p&gt;
+
+&lt;p&gt;然后呢，有个人（具体不详）想到个好主意：将LiveScript重命名为JavaScript。当然“Java”是Sun的注册商标，不过他们当时他们对这个提议也很赞同，给了Netscapte许可来使用“JavaScript”这个名字。&lt;/p&gt;
+
+&lt;p&gt;成交！&lt;/p&gt;
+
+&lt;h3 id=&#34;microsoft-s-jscript:8ab2a088cb75a2d5ac5127849d769cad&#34;&gt;Microsoft’s JScript&lt;/h3&gt;
+
+&lt;p&gt;当然，微软的浏览器也需要个脚本语言。所以他们就模仿(reverse-engineer)JavaScript做了一个，集成到Internet  Explorer里了。&lt;/p&gt;
+
+&lt;p&gt;因为“Java”这个名字是需要license的，他们只好取名JScript，其实和JavaScript完全是一个东西。&lt;/p&gt;
+
+&lt;h3 id=&#34;ecmascript:8ab2a088cb75a2d5ac5127849d769cad&#34;&gt;ECMAScript&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;下面还没翻译&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;With all this mess, JavaScript needed to be standardized. So, Netscape looked for a body that would do just that. The W3C refused to do it, and eventually they ended up at the European ECMA (weird).&lt;/p&gt;
+
+&lt;p&gt;ECMA did standardize the language, but didn’t fix the obviously awful and confusing “JavaScript” name. The thing is, they didn’t know what to call it. So, they just published it with their working name: ECMAScript.&lt;/p&gt;
+
+&lt;p&gt;JavaScript, JScript, and ECMAScript are sometimes thought to be different things, but are simply three different names that mean the same thing: JavaScript.
+An unique language
+JavaScript was (and is) truly unique.&lt;/p&gt;
+
+&lt;p&gt;It doesn’t use classes, for instance: in every other programming language, objects are instances of a class, and inheritance works by extending an object’s class. Instead, JavaScript uses prototypes, which means that an object can be augmented by using other objects directly, without passing by classes.&lt;/p&gt;
+
+&lt;p&gt;This is really awesome, and if you use prototypes you can still do classes (you can’t do the other way around), but inheriting directly from objects—along with its great function model—are what makes JavaScript such a powerful language.&lt;/p&gt;
+
+&lt;p&gt;JavaScript (perhaps because of it “missing” classes?) used to be considered by many as a joke, and a language for amateurs.&lt;/p&gt;
+
+&lt;p&gt;When Google popularized Ajax, JavaScript started gaining a lot of popularity, to eventually become one of the most popular programming languages in use today.
+Current version&lt;/p&gt;
+
+&lt;p&gt;ECMA is still in charge of the language. While at the time of writing (Oct, 2014) ES6 is the latest release and ES7 is already in the works, the most recent version that has broad browser support is ES5 (if you don’t need to support IE8). Old browsers support ES3 (ES4 was abandoned and was never released).&lt;/p&gt;
+
+&lt;p&gt;ES5 is pretty great. It cleaned JavaScript up from a lot of design errorsthat the language  shipped with because of its quick/premature release. ES5 introduces “strict mode”, which allows developers to specify that they only wish to use features from the modern standard, and a lot of other interesting additions.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,54 @@
+<!--{{ partial "custom/header.html" . }}-->
+<nav id="main-nav">
+	<div id="site-logo">
+		<img src='/img/myphoto.jpg' alt="Me!" />
+	</div>
+
+	<div id="website-name">
+		<a href="/">{{ $.Site.Title }}</a>
+		<div id="website-subname">{{ $.Site.Params.SubTitle }}</div>
+	</div>
+
+	<div id="nav-bar-wrapper">
+		{{ partial "navigation.html" . }}
+	</div>
+	<div id="nav-bar-button">导航</div>
+	<div id="nav-bar-animate">
+		{{ partial "navigation.html" . }}
+		<a href="#"><div id="nav-gototop">回顶部</div></a>
+	</div>
+
+	<div id="path-info" style="float:right;clear:both;">
+		<!--{{.URL}}-->
+	</div>
+</nav>
+<script type="text/javascript">
+	function hideNavMenu()
+	{
+		if($("#nav-bar-animate").position().left < document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":-500},200);
+		}
+	}
+	function toggleNavMenu()
+	{
+		if($("#nav-bar-animate").position().left > document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":0},200);
+		}
+		else
+		{
+			hideNavMenu();
+		}
+	}
+	$("#nav-bar-button").click(function(){
+		toggleNavMenu();
+	});
+
+	$(document).click(function(){
+		hideNavMenu();
+	});
+	$(document).on("tap",function(){
+	  	hideNavMenu();
+	});
+</script>

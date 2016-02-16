@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Win32 on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://gznotes.net/tags/win32/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Sat, 06 Feb 2016 23:02:50 JST</updated>
+    
+    <item>
+      <title>Static控件的一个隐蔽特性</title>
+      <link>http://gznotes.net/2016/02/06/static-notify/</link>
+      <pubDate>Sat, 06 Feb 2016 23:02:50 JST</pubDate>
+      
+      <guid>http://gznotes.net/2016/02/06/static-notify/</guid>
+      <description>
+
+&lt;p&gt;Static控件常用来显示文字列，一般不会和用户有别的交互。&lt;/p&gt;
+
+&lt;p&gt;但是，从WindowsVista之后，多了了一个很多人不知道的功能：&lt;br&gt;双击带有SS_NOTIFY属性的Static控件，windows会将Static内容copy到剪贴板。&lt;/p&gt;
+
+&lt;h2 id=&#34;到底怎么回事:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;到底怎么回事？&lt;/h2&gt;
+
+&lt;p&gt;一个带有SS_NOTIFY属相的Static控件，比较常见的处理是:&lt;br&gt;在收到WS_LBUTTONDBLCLK消息后，向父窗口发WM_COMMAND告知自己被双击(STN_DBLCLK)。&lt;/p&gt;
+
+&lt;p&gt;在Vista之后，还会GetWindowText()得到Static的文字列，放到剪贴板里。
+挺贴心，不过有点隐蔽。有时候也添了点小麻烦。&lt;/p&gt;
+
+&lt;h2 id=&#34;一点麻烦:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;一点麻烦&lt;/h2&gt;
+
+&lt;p&gt;在Vista之前开发的软件，有的是依赖双击Static后Static向父窗口发的WM_COMMAND来弹出其他画面的。
+那么，下面的情况就让用户有点意外了：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在其他程序里copy一点内容&lt;/li&gt;
+&lt;li&gt;双击Static&lt;/li&gt;
+&lt;li&gt;在新打开的画面粘贴刚刚copy的内容&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;上面第3部贴出来的是Static的文字列，用户就会抱怨：这是肿么回事呢？？&lt;/p&gt;
+
+&lt;h2 id=&#34;怎么解决:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;怎么解决？&lt;/h2&gt;
+
+&lt;p&gt;虽说这是微软加的功能，但是客户如果不喜欢，就得想办法解决。&lt;/p&gt;
+
+&lt;p&gt;简单讲就是将Static控件的消息处理函数(WndProc)替换成自己写的。
+在自己写的WndProc里，对WS_LBUTTONDBLCLK做特殊处理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;BOOL disableCopyOnDblClickStatic(HANDLE hStatic)
+{
+	// 得到默认的WndProc
+	WNDPROC pOldWndProc = (WNDPROC)GetWindowLong(hStatic, GWL_WNDPROC);
+	// 让Static自己管理这个默认WndProc：这样在新WndProc里，就可以得到了。
+	SetWindowProc(hStatic,GWL_USERDATA, (LONG)pOldWndProc);
+
+	// 下面newWndProc是给Static新写的WndProc，
+	// 收到WS_LBUTTONDBLCLK后，只给父窗口发个WM_COMMAND就直接返回。
+	// 其他消息通过CallWndProc函数继续使用windows默认处理
+	SetWindowProc(hStatic,GWL_WNDPROC, (LONG)newWndProc);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;这么修改的优缺点:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;这么修改的优缺点&lt;/h2&gt;
+
+&lt;p&gt;缺点：需要针对每个有问题的Static控件进行修改。&lt;/p&gt;
+
+&lt;p&gt;优点：打击面不会太大，因为不能保证所有画面里，这个动作都被认为是bug(那样的话，就显得微软太蠢了哈。。)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>关于对话框中单选框焦点设定的一点调查</title>
+      <link>http://gznotes.net/2015/11/07/radio-focus-in-dialog/</link>
+      <pubDate>Sat, 07 Nov 2015 06:27:54 JST</pubDate>
+      
+      <guid>http://gznotes.net/2015/11/07/radio-focus-in-dialog/</guid>
+      <description>
+
+&lt;p&gt;对话框中单选框(radio button)的焦点控制，有点说道。&lt;/p&gt;
+
+&lt;p&gt;比如，调用SetCheck()并不能让其完全处于选中状态，和手动点击达到的效果不同。&lt;/p&gt;
+
+&lt;h3 id=&#34;对话框的消息处理函数-dialog-proc-返回值:04aade06df32a32d87036425c0a6b3de&#34;&gt;对话框的消息处理函数（dialog  proc）返回值&lt;/h3&gt;
+
+&lt;p&gt;此函数返回值只有一个意思： 返回TRUE是告诉windows操作系统，把默认焦点设置到对话框资源（RC）文件里的第一个控件上。
+对话框的RC文件是一个文本文件，修改控件在这个文件里的先后位置，也就可以修改画面初期显示后的默认焦点所在控件。&lt;/p&gt;
+
+&lt;p&gt;不过，如果在dialog proc里，你通过SetFocus（）将焦点设置到别的控件上，就应该返回FALSE。否则操作系统还是会将焦点设置到第一个空间上。&lt;/p&gt;
+
+&lt;h3 id=&#34;对话框的消息处理函数-dialog-proc-返回值-1:04aade06df32a32d87036425c0a6b3de&#34;&gt;对话框的消息处理函数（dialog proc）返回值&lt;/h3&gt;
+
+&lt;p&gt;单选框（radio button）的焦点设定比较容易出问题。因为有时候视觉上radio button被选上了，但是一些内部状态没有设置，系统内部并不认为它被选上了，也就进一步影响按tab键时焦点的切换。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;BM_SETCHECK只能让radio在视觉上变成选中状态,但实际上和通过点击达到的选中状态还是不同的。&lt;/li&gt;
+&lt;li&gt;调用SetFocus()把焦点设置到这个radio button上，也仍然达不到手动鼠标点击实现的选中状态。这一点可以通过tab键提供焦点时，焦点的移动方式不同来证实。&lt;/li&gt;
+&lt;li&gt;只有鼠标点击，才能让一个radio button处于完全的选中状态。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;tab和4个arrow键在切换空间焦点操作上的作用并不相同:04aade06df32a32d87036425c0a6b3de&#34;&gt;Tab和4个Arrow键在切换空间焦点操作上的作用并不相同&lt;/h3&gt;
+
+&lt;p&gt;Arrow可以在一个radio button group内移动焦点，而tab在更大的范围内。比如一个radio已经选上了，那么按tab键焦点就不会走到其之下的radio，而是跳过下面未选中的radio，走到这个radio group之下的控件。在切回到radio group的时候，焦点也只会在那个选中的radio停留。想在group内的各个radio之间移动，可以用四个Arrow键。&lt;/p&gt;
+
+&lt;p&gt;上述内容主要参考这段的&lt;a href=&#34;https://msdn.microsoft.com/en-us/library/windows/desktop/ms645469(v=vs.85).aspx&#34;&gt;MSDN描述&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

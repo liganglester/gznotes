@@ -1,0 +1,33 @@
+
+<div itemscope itemtype="http://schema.org/Blog">
+	{{ $prevYear := "" }}
+	{{ $pages := .Data.Pages }}
+	{{ range $index, $page := .Data.Pages }}
+		{{ if eq .Type "post" }}
+
+<!--
+		{{ if eq $index 0 }}
+		<section class="archives"><h1 class="year">{{ dateFormat "2006" .Date }}</h1>
+		{{ else }}
+			{{ $prev := (sub $index 1) }}
+			{{ $prevYear := (index $pages $prev).Date | dateFormat "2006" }}
+			{{ $curYear := (dateFormat "2006" .Date) }}
+
+			{{ if ne $prevYear $curYear }}
+				</section>
+				<section class="archives"><h1 class="year">{{ dateFormat "2006" .Date }}</h1>
+			{{ end }}
+		{{ end }}
+-->
+		<a href="{{ .Permalink }}">
+		<div class="archive-item">
+			<h1 itemprop="name">{{ .Title }}
+				<span class="archive-item-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+			</h1>
+		</div>
+		</a>
+
+		{{ end }}
+	{{ end }}
+	</section>
+</div>

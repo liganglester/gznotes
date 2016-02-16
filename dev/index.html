@@ -1,0 +1,604 @@
+<!DOCTYPE HTML>
+
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xajDVBSr4m" />
+	<title>钢子笔记</title>
+	<meta name="generator" content="Hugo 0.14" />
+	<meta name="author" content="钢子">
+	<meta name="description" content="一个C&#43;&#43;程序员，记录自己学习的点点滴滴">
+	
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<link href='/index.xml' rel="alternate" title="钢子笔记" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://localhost:1313/">
+	<link href="http://localhost:1313//favicon.png" rel="shortcut icon">
+	<link href="http://localhost:1313//css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	
+	<script src="http://localhost:1313//js/jquery.min.js"></script>
+	<link href="/css/prism.css" rel="stylesheet" />
+	<script type="text/javascript">
+
+
+
+$.fn.draggable = function() {
+  var offset = null;
+  var start = function(e) {
+	var orig = e.originalEvent;
+	var pos = $(this).position();
+	offset = {
+	  x: orig.changedTouches[0].pageX - pos.left,
+	  y: orig.changedTouches[0].pageY - pos.top
+	};
+  };
+  var moveMe = function(e) {
+	e.preventDefault();
+	var orig = e.originalEvent;
+	$(this).css({
+	  top: orig.changedTouches[0].pageY - offset.y - window.pageYOffset,
+	  left: orig.changedTouches[0].pageX - offset.x
+	});
+  };
+  this.bind("touchstart", start);
+  this.bind("touchmove", moveMe);
+};
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires +";path=/";
+} 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+function isNewVisitor() {
+    var flg = getCookie("gznotes-visited");
+    if (flg === "") {
+		return true;
+    } else {
+		return false;
+    }
+}
+</script>
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="header-col" id="header-col">
+			<header id="header" class="inner">
+				
+<nav id="main-nav">
+	<div id="site-logo">
+		<img src='/img/myphoto.jpg' alt="Me!" />
+	</div>
+
+	<div id="website-name">
+		<a href="/">钢子笔记</a>
+		<div id="website-subname">记录学习的点点滴滴</div>
+	</div>
+
+	<div id="nav-bar-wrapper">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://localhost:1313//categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://localhost:1313//categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://localhost:1313//categories/杂记/">杂记</a></li>
+		<li><a href="http://localhost:1313//links/">推介</a></li>
+		<li><a href="http://localhost:1313//about/">关于</a></li>
+	</ul>
+</div>
+	</div>
+	<div id="nav-bar-button">导航</div>
+	<div id="nav-bar-animate">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://localhost:1313//categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://localhost:1313//categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://localhost:1313//categories/杂记/">杂记</a></li>
+		<li><a href="http://localhost:1313//links/">推介</a></li>
+		<li><a href="http://localhost:1313//about/">关于</a></li>
+	</ul>
+</div>
+		<a href="#"><div id="nav-gototop">回顶部</div></a>
+	</div>
+
+	<div id="path-info" style="float:right;clear:both;">
+		
+	</div>
+</nav>
+<script type="text/javascript">
+	function hideNavMenu()
+	{
+		if($("#nav-bar-animate").position().left < document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":-500},200);
+		}
+	}
+	function toggleNavMenu()
+	{
+		if($("#nav-bar-animate").position().left > document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":0},200);
+		}
+		else
+		{
+			hideNavMenu();
+		}
+	}
+	$("#nav-bar-button").click(function(){
+		toggleNavMenu();
+	});
+
+	$(document).click(function(){
+		hideNavMenu();
+	});
+	$(document).on("tap",function(){
+	  	hideNavMenu();
+	});
+</script>
+			</header>
+		</div>
+		<div id="mid-col">
+			
+			<div class="mid-col-container">
+				
+				<div id="content" class="inner">
+					
+					<div itemscope itemtype="http://schema.org/Blog">
+					
+				        <article class="post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<h3 class="title" itemprop="name"><a href="http://localhost:1313/2016/02/10/15-rules-for-writing-quality-code/" itemprop="url">（译）15 Rules for Writing Quality Code</a></h3>
+    <div class="meta">
+		
+<time datetime='Wed, Feb 10, 2016' data-updated="true" itemprop="datePublished">2016/2/10</time>
+
+		
+			<div class="tags">
+
+
+	
+	
+	    <a href="http://localhost:1313//tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8"> 软件品质 </a>
+	
+
+
+</div>
+		
+		
+	</div>
+	
+	<div class="entry-content" style="clear:both" itemprop="articleBody">
+		
+		<p><a href="http://www.informit.com/articles/article.aspx?p=2223710">英文原文地址</a></p>
+
+<p>Diomidis Spinellis, author of Code Quality: The Open Source Perspective, lists the 15 most important rules for writing sparkling code. Follow them, and your code will look professional, live long, grow smoothly, and earn your colleagues’ love (rather than swearing).</p>
+
+<p>对于如何写出高质量软件，《Code Quality: The Open Source Perspective》的作者Diomidis Spinellis列出了15条重要规则。遵守这些规则，你就可以写出专业的代码。而且你的代码会被持久使用，易于扩展。你的同事也会因此对你肃然起敬。</p>
+
+		
+		<div class="read-more">
+		
+			<a  href="http://localhost:1313/2016/02/10/15-rules-for-writing-quality-code/" >
+				
+					阅读全文 →
+				
+			</a>
+		
+		</div>
+	</div>
+</article>
+
+				    
+				        <article class="post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<h3 class="title" itemprop="name"><a href="http://localhost:1313/2016/02/10/skills-needed-for-students/" itemprop="url">刚毕业的新人缺什么技能？</a></h3>
+    <div class="meta">
+		
+<time datetime='Wed, Feb 10, 2016' data-updated="true" itemprop="datePublished">2016/2/10</time>
+
+		
+			<div class="tags">
+
+
+	
+	
+	    <a href="http://localhost:1313//tags/%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95"> 职业发展 </a>
+	
+
+
+</div>
+		
+		
+	</div>
+	
+	<div class="entry-content" style="clear:both" itemprop="articleBody">
+		
+		<p>参与过几次公司的新人面试，做过新人的师傅。发现刚毕业学生所缺少的技能有些共通之处。在此总结下。想的不完整，随时补充。</p>
+
+		
+		<div class="read-more">
+		
+			<a  href="http://localhost:1313/2016/02/10/skills-needed-for-students/" >
+				
+					阅读全文 →
+				
+			</a>
+		
+		</div>
+	</div>
+</article>
+
+				    
+				        <article class="post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<h3 class="title" itemprop="name"><a href="http://localhost:1313/2016/02/10/big-company-or-small-company/" itemprop="url">毕业生就业，大公司还是小公司？</a></h3>
+    <div class="meta">
+		
+<time datetime='Wed, Feb 10, 2016' data-updated="true" itemprop="datePublished">2016/2/10</time>
+
+		
+			<div class="tags">
+
+
+	
+	
+	    <a href="http://localhost:1313//tags/%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95"> 职业发展 </a>
+	
+
+
+</div>
+		
+		
+	</div>
+	
+	<div class="entry-content" style="clear:both" itemprop="articleBody">
+		
+		<p>不只是毕业生，其实都有这个困惑。</p>
+
+		
+		<div class="read-more">
+		
+			<a  href="http://localhost:1313/2016/02/10/big-company-or-small-company/" >
+				
+					阅读全文 →
+				
+			</a>
+		
+		</div>
+	</div>
+</article>
+
+				    
+				        <article class="post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<h3 class="title" itemprop="name"><a href="http://localhost:1313/2016/02/10/come-to-japan-first-time/" itemprop="url">首次来日本的注意事项</a></h3>
+    <div class="meta">
+		
+<time datetime='Wed, Feb 10, 2016' data-updated="true" itemprop="datePublished">2016/2/10</time>
+
+		
+			<div class="tags">
+
+
+	
+	
+	    <a href="http://localhost:1313//tags/%E4%BA%86%E8%A7%A3%E6%97%A5%E6%9C%AC"> 了解日本 </a>
+	
+
+
+</div>
+		
+		
+	</div>
+	
+	<div class="entry-content" style="clear:both" itemprop="articleBody">
+		
+		<p>如果第一次来日本，有些地方需要注意的，这里总结下个人经验。</p>
+
+		
+		<div class="read-more">
+		
+			<a  href="http://localhost:1313/2016/02/10/come-to-japan-first-time/" >
+				
+					阅读全文 →
+				
+			</a>
+		
+		</div>
+	</div>
+</article>
+
+				    
+				        <article class="post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<h3 class="title" itemprop="name"><a href="http://localhost:1313/2016/02/06/static-notify/" itemprop="url">Static控件的一个隐蔽特性</a></h3>
+    <div class="meta">
+		
+<time datetime='Sat, Feb 6, 2016' data-updated="true" itemprop="datePublished">2016/2/6</time>
+
+		
+			<div class="tags">
+
+
+	
+	
+	    <a href="http://localhost:1313//tags/win32"> Win32 </a>
+	
+
+
+</div>
+		
+		
+	</div>
+	
+	<div class="entry-content" style="clear:both" itemprop="articleBody">
+		
+		<p>Static控件常用来显示文字列，一般不会和用户有别的交互。</p>
+
+<p>但是，从WindowsVista之后，多了了一个很多人不知道的功能：<br>双击带有SS_NOTIFY属性的Static控件，windows会将Static内容copy到剪贴板。</p>
+
+		
+		<div class="read-more">
+		
+			<a  href="http://localhost:1313/2016/02/06/static-notify/" >
+				
+					阅读全文 →
+				
+			</a>
+		
+		</div>
+	</div>
+</article>
+
+				    
+				    </div>
+				    <nav id="pagenavi">
+					    
+					    
+					        <a href="/page/2/" class="next">下一页</a>
+					    
+					</nav>
+				</div>
+				<div id="taglist-mid-col">
+						<div class="tags-list">
+		<div class="common-title">tags:</div>
+		<ul>
+		
+			<li>
+				<a href="/tags/c/c">
+				
+					c/c&#43;&#43;
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E4%BA%86%E8%A7%A3%E6%97%A5%E6%9C%AC">
+				
+					了解日本
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/win32">
+				
+					win32
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/javascript">
+				
+					javascript
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95">
+				
+					职业发展
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/cookie">
+				
+					cookie
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/rss">
+				
+					rss
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8">
+				
+					软件品质
+				
+				</a>
+			</li>
+		
+		</ul>
+	</div>
+				</div>
+			</div>
+		</div>
+		<div id="right-col">
+			
+			<div id="taglist-right-col">
+					<div class="tags-list">
+		<div class="common-title">tags:</div>
+		<ul>
+		
+			<li>
+				<a href="/tags/c/c">
+				
+					c/c&#43;&#43;
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/javascript">
+				
+					javascript
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95">
+				
+					职业发展
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E4%BA%86%E8%A7%A3%E6%97%A5%E6%9C%AC">
+				
+					了解日本
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/win32">
+				
+					win32
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/cookie">
+				
+					cookie
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/rss">
+				
+					rss
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8">
+				
+					软件品质
+				
+				</a>
+			</li>
+		
+		</ul>
+	</div>
+			</div>
+		</div>
+		<footer id="footer" class="inner"><div id="copyright-area">
+	Copyright &copy; 2016
+	
+		钢子笔记
+	
+</div>
+<div id="footer-link-area">
+	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-70040004-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+
+<script>
+(function(){
+	if(window.location.hostname === "localhost")
+	{
+		document.write("<h1>localhost, donot push to baidu</h1>");
+		return;
+	}
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+</div>
+
+<script src="/js/prism.js" async></script>
+<script type="text/javascript">
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position > 900 || 
+		position > bottom*0.67 ) 
+		{
+			var newVisitor = isNewVisitor();
+			if(newVisitor === true)
+			{
+				$("#invite-questionnaire").animate({right:"0", bottom:"0"}, 100);
+				setCookie("gznotes-visited","true", 30);
+			}
+		}
+		
+	});
+	function hideQuestionnaire()
+	{
+		$("#invite-questionnaire").css("display","none");
+	}
+</script>
+<div id="invite-questionnaire">
+	<span>可否占用您30秒钟时间，请您给本站的改善提些意见？<a href="https://www.wenjuan.com/s/AFbMJj/">好</a></span><br>
+	<span>也可稍后点击页面底部“意见反馈”。<a href="#" onclick="hideQuestionnaire()">稍后再说</a></span>
+</div>
+<div><a href="#"><div id="gototop">回顶部</div></a></div>
+
+	<script type="text/javascript">
+	
+	
+	$("#gototop").draggable();
+	
+	
+
+	</script>
+</footer>
+	</div>
+	
+
+	
+<script data-no-instant>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
+</html>

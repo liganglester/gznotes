@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>软件品质 on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://gznotes.net/tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Wed, 10 Feb 2016 22:40:47 JST</updated>
+    
+    <item>
+      <title>（译）15 Rules for Writing Quality Code</title>
+      <link>http://gznotes.net/2016/02/10/15-rules-for-writing-quality-code/</link>
+      <pubDate>Wed, 10 Feb 2016 22:40:47 JST</pubDate>
+      
+      <guid>http://gznotes.net/2016/02/10/15-rules-for-writing-quality-code/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://www.informit.com/articles/article.aspx?p=2223710&#34;&gt;英文原文地址&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Diomidis Spinellis, author of Code Quality: The Open Source Perspective, lists the 15 most important rules for writing sparkling code. Follow them, and your code will look professional, live long, grow smoothly, and earn your colleagues’ love (rather than swearing).&lt;/p&gt;
+
+&lt;p&gt;对于如何写出高质量软件，《Code Quality: The Open Source Perspective》的作者Diomidis Spinellis列出了15条重要规则。遵守这些规则，你就可以写出专业的代码。而且你的代码会被持久使用，易于扩展。你的同事也会因此对你肃然起敬。&lt;/p&gt;
+
+&lt;p&gt;There are myriad ways of writing poor code. Thankfully, rising to the level of writing quality programs involves just 15 rules. Following them won&amp;rsquo;t make you a master programmer, but will allow you to fake one quite convincingly.&lt;/p&gt;
+
+&lt;p&gt;稍不留神我们就会写出一堆烂代码，写出好代码却不容易。不过，好在想写出高质量程序只需要下面的15条规则。遵守这些规则不能让你成为一位编程大师，不过会让你(提高不少)至少看起来很专业。&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-1-follow-the-style-guide:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 1: Follow the Style Guide&lt;/h2&gt;
+
+&lt;p&gt;Every programming language has a style guide that tells you in great detail how to indent your code, where to put spaces and braces, how to name stuff, how to comment—all the good and bad practices. For example, the style guide tells you the 12 mistakes lurking in this code snippet:&lt;/p&gt;
+
+&lt;p&gt;规则1：遵守编程规约。
+每种编程语言都有编程规约。规约里会详细规定如何缩进，怎么合理安排余白和使用括号，如何给函数和变量等命名，怎么写注释等等，介绍很多好的和不好的做法。比如：编程规约里会举下面的例子，告诉你里面隐藏了12个编程规约方面的错误。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;for(i=0 ;i&amp;lt;10 ;i++){
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;钢子：我实在找不出12个，可能是老外夸张？
+我找到的只有： 1. 常数10应该用个更有意义的变量或者常量代替 2. 再多用些空格分隔。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Read the guide carefully, learn the basics by heart, look up corner cases, apply the rules religiously, and your programs will be better than those written by the majority of university graduates.&lt;/p&gt;
+
+&lt;p&gt;仔细阅读规约，用心学习基础，不留死角，严格遵守规约，你的代码肯定就比绝大多数在校学生强了。&lt;/p&gt;
+
+&lt;p&gt;Many organizations customize style guides to reflect the organization&amp;rsquo;s specific practices. For instance, Google has developed and released style guides for more than a dozen languages. These guides are well thought out, so check them out if you&amp;rsquo;re looking for help programming for Google. Guides even include editor settings to help you apply a programming style, and custom tools can verify that your code adheres to that style. Use these tools.&lt;/p&gt;
+
+&lt;p&gt;很多公司会根据自己的需求定制自己的编程规约。比如，谷歌就针对10多种语言制定了自己的编程风格规约。这些规约都是经过仔细研究制定的，所以如果你想做谷歌相关编程，可以研究下。编程规约里甚至还会介绍如何设置编辑器，以便你更容易遵守规约，也可能会介绍用于检查你是否遵守规约的工具。要好好利用这些工具。&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-2-create-descriptive-names:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 2: Create Descriptive Names&lt;/h2&gt;
+
+&lt;p&gt;Constrained by slow, clunky teletypes, programmers in the past used to contract the names of their variables and routines to save time, keystrokes, ink, and paper. This culture persists in some communities, in the name of backward compatibility; consider C&amp;rsquo;s tongue-twisting wcscspn (wide character string complement span) function. But there&amp;rsquo;s no excuse for this practice in modern code.&lt;/p&gt;
+
+&lt;p&gt;Use long descriptive names, like complementSpanLength, to help yourself, now and in the future, as well as your colleagues to understand what the code does. The only exception to this rule concerns the few key variables used within a method&amp;rsquo;s body, such as a loop index, a parameter, an intermediate result, or a return value.&lt;/p&gt;
+
+&lt;p&gt;Even more importantly, think long and hard before you name something. Is the name accurate? Did you mean highestPrice, rather than bestPrice? Is the name specific enough to avoid taking more than its fair share of semantic space? Should you name your method getBestPrice, rather than getBest? Does its form match that of other similar names? If you have a method ReadEventLog, you shouldn&amp;rsquo;t name another NetErrorLogRead. If you&amp;rsquo;re naming a function, does the name describe what the function returns?&lt;/p&gt;
+
+&lt;p&gt;Finally, there are some easy naming rules. Class and type names should be nouns. Methods names should contain a verb. In particular, if a method returns a value indicating whether something holds true for an object, the method name should start with is. Other methods that return an object&amp;rsquo;s property should start with get, and those that set a property should start with set.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-3-comment-and-document:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 3: Comment and Document&lt;/h2&gt;
+
+&lt;p&gt;Start every routine you write (function or method) with a comment outlining what the routine does, its parameters, and what it returns, as well as possible errors and exceptions. Summarize in a comment the role of each file and class, the contents of each class field, and the major steps of complex code. Write the comments as you develop the code; if you think you&amp;rsquo;ll add them later, you&amp;rsquo;re kidding yourself.&lt;/p&gt;
+
+&lt;p&gt;In addition, ensure that your code as a whole (for example, an application or library) comes with at least a guide explaining what it does; indicating its dependencies; and providing instructions on building, testing, installation, and use. This document should be short and sweet; a single README file is often enough.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-4-don-t-repeat-yourself:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 4: Don&amp;rsquo;t Repeat Yourself&lt;/h2&gt;
+
+&lt;p&gt;Never copy-and-paste code. Instead, abstract the common parts into a routine or class (or macro, if you must), and use it with appropriate parameters. More broadly, avoid duplicate instances of similar data or code. Keep a definitive version in one place, and let that version drive all other uses. Following are some good examples of this practice:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Creation of API reference guides from comments, using Javadoc or Doxygen
+Automatic detection of unit tests through an annotation or a naming convention
+Generation of both PDF and HTML documentation from a single markup source
+Derivation of object classes from a database schema (or the opposite)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;rule-5-check-for-errors-and-respond-to-them:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 5: Check for Errors and Respond to Them&lt;/h2&gt;
+
+&lt;p&gt;Routines can return with an error indication, or they can raise an exception. Deal with it. Don&amp;rsquo;t assume that a disk will never fill up, your configuration file will always be there, your application will run with the required permissions, memory-allocation requests will always succeed, or that a connection will never time out. Yes, good error-handling is hard to write, and it makes the code longer and less readable. But ignoring errors and exceptions simply sweeps the problem under the carpet, where an unsuspecting end user will inevitably find it one day.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-6-split-your-code-into-short-focused-units:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 6: Split Your Code into Short, Focused Units&lt;/h2&gt;
+
+&lt;p&gt;Every method, function, or logical code block should fit on a reasonably-sized screen window (25–50 lines long). If it&amp;rsquo;s longer, split it into shorter pieces. An exception can be made for simple repetitive code sequences. However, in such cases, consider whether you could drive that code through a data table. Even within a routine, divide long code sequences into blocks whose function you can describe with a comment at the beginning of each block.&lt;/p&gt;
+
+&lt;p&gt;Furthermore, each class, module, file, or process should concern one single thing. If a code unit undertakes diverse responsibilities, split it accordingly.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-7-use-framework-apis-and-third-party-libraries:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 7: Use Framework APIs and Third-Party Libraries&lt;/h2&gt;
+
+&lt;p&gt;Learn what functionality is available through an API in your programming framework, and also what&amp;rsquo;s commonly available through mature, widely adopted third-party libraries. Libraries supported by your system&amp;rsquo;s package manager are often a good bet. Use that code, resisting the temptation to reinvent the wheel (in a dysfunctional square shape).&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-8-don-t-overdesign:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 8: Don&amp;rsquo;t Overdesign&lt;/h2&gt;
+
+&lt;p&gt;Keep your design focused on today&amp;rsquo;s needs. Your code can be general to accommodate future evolution, but only if that doesn&amp;rsquo;t make it more complex. Don&amp;rsquo;t create parameterized classes, factory methods, deep inheritance hierarchies, and arcane interfaces to solve problems that don&amp;rsquo;t yet exist—you can&amp;rsquo;t guess what tomorrow will bring. On the other hand, when the code&amp;rsquo;s structure no longer fits the task at hand, don&amp;rsquo;t shy away from refactoring it to a more appropriate design.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-9-be-consistent:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 9: Be Consistent&lt;/h2&gt;
+
+&lt;p&gt;Do similar things in similar ways. If you&amp;rsquo;re developing a routine whose functionality resembles that of an existing routine, use a similar name, the same parameter order, and a comparable structure for the code body. The same rule applies to classes: Give the new class similar fields and methods, make it adhere to the same interface, and match any new names with those already used in similar classes. Make the order and number of case statements or if else blocks follow the corresponding definition in the specifications you&amp;rsquo;re using. Keep unrelated items in alphabetical or numerical order.&lt;/p&gt;
+
+&lt;p&gt;Your code should adopt the conventions of the framework in which you&amp;rsquo;re programming. For instance, it&amp;rsquo;s common practice to represent ranges half-open: closed (inclusive) on the left (the range&amp;rsquo;s beginning), but open (exclusive) on the right (the end). If there&amp;rsquo;s no a convention for a particular choice, establish one and follow it religiously.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-10-avoid-security-pitfalls:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 10: Avoid Security Pitfalls&lt;/h2&gt;
+
+&lt;p&gt;Modern code rarely works in isolation. Therefore it will inevitably risk becoming the target of malicious attacks. They don&amp;rsquo;t have to come from the Internet; the attack vector could be data fed into your application. Depending on your programming language and application domain, you might have to worry about buffer overflows, cross-site scripting, SQL injection, and similar problems. Learn what these problems are, and avoid them in your code. It&amp;rsquo;s not difficult.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-11-use-efficient-data-structures-and-algorithms:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 11: Use Efficient Data Structures and Algorithms&lt;/h2&gt;
+
+&lt;p&gt;Simple code is often more maintainable than equivalent code hand-tuned for efficiency. Fortunately, you can combine maintainability with efficiency by utilizing the data structures and algorithms provided by your programming framework. Use maps, sets, vectors, and the algorithms that work on them, and your code will be clearer, more scalable, faster, and memory-frugal. For example, if you keep a thousand values in an ordered set, a set intersection will find the values common with another set in a similar number of operations, rather than performing a million comparisons.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-12-include-unit-tests:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 12: Include Unit Tests&lt;/h2&gt;
+
+&lt;p&gt;The complexity of modern software makes it expensive to deploy a system and difficult to test it as a black box. A more productive approach is to accompany every small part of your code with tests that verify its correct function. This approach simplifies debugging by allowing you to catch errors early, close to their source. Unit testing is indispensable when you program with dynamically typed languages such as Python and JavaScript, because they&amp;rsquo;ll only catch at runtime any errors that that a statically typed language such as Java, C#, or C++ would catch at compile time. Unit testing also allows you to refactor the code with confidence. You can use an xUnit framework to simplify writing these tests and automate running them.
+Rule 13: Keep Your Code Portable&lt;/p&gt;
+
+&lt;p&gt;Unless you have some compelling reason, avoid using functionality that&amp;rsquo;s available only on a specific platform or framework. Don&amp;rsquo;t assume that particular data types (such as integers, pointers, and time) are of a given width (for example, 32 bits), because this differs between various platforms. Store the program&amp;rsquo;s messages separately from the code, and don&amp;rsquo;t hardcode cultural conventions such as a decimal separator or date format. Conventions need to change when your code runs in other countries around the world, so keep this adaptation as painless as possible.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-14-make-your-code-buildable:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 14: Make Your Code Buildable&lt;/h2&gt;
+
+&lt;p&gt;A single command should build your code into a form that&amp;rsquo;s ready for distribution. The command should allow you to perform fast incremental builds and run the required tests. To achieve this goal, use a build automation tool like Make, Apache Maven, or Ant. Ideally, you should set up a continuous integration system that will check, build, and test your code every time you make a change.&lt;/p&gt;
+
+&lt;h2 id=&#34;rule-15-put-everything-under-version-control:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Rule 15: Put Everything Under Version Control&lt;/h2&gt;
+
+&lt;p&gt;All elements of your system—code, documentation, tool sources, build scripts, test data—should be under version control. Git and GitHub make this task cheap and hassle-free, but many other similarly powerful tools and services are available. You should be able to build and test your program on a properly configured system, simply by checking out the code from the repository.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary:5e1ccb98e0ae4458c6ef9434df04c806&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;By making these 15 rules part of your everyday programming practices, you&amp;rsquo;ll eventually create code that&amp;rsquo;s easier to read, thoroughly tested, more likely to run correctly, and much simpler to revise when that time comes. You&amp;rsquo;ll also save yourself and your program&amp;rsquo;s users a lot of headaches. For detailed examples of both good and bad code, check out my book Code Quality: The Open Source Perspective, which provides hundreds of examples taken from open source projects.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

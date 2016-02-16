@@ -1,0 +1,24 @@
+BaseURL = "http://gznotes.net"
+languageCode = "zh-cn"
+title="钢子笔记"
+paginate=5
+[permalinks]
+	post = "/:year/:month/:day/:filename/"
+[params]
+	description="一个C++程序员，记录自己学习的点点滴滴"
+	author="钢子"
+	older="前一页"
+	newer="后一页"
+	pageNotFoundTitle="抱歉，出bug了！"
+	pageNotFoundSubtitle="I will fix it soon!"
+	date_format="Mon, Jan 2, 2006"
+	DateForm="Mon, Jan 2, 2006"
+	profilepic="/img/myphoto.jpg"
+	copyright = "版权所有，转载请注明出处"
+	google_analytics_tracking_id = "UA-70040004-1"
+	subscribe_rss = "/index.xml"
+	SubTitle="记录学习的点点滴滴"
+[taxonomies]
+	tag = "tags"
+	category = "categories"
+	series = "series"

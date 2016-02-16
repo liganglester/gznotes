@@ -1,0 +1,56 @@
+{{ partial "head.html" . }}
+
+<body>
+	<div class="container">
+		<div class="header-col" id="header-col">
+			<header id="header" class="inner">
+				{{ partial "header.html" . }}
+			</header>
+		</div>
+		<div id="mid-col">
+			{{ if $.Site.Params.banner }}
+				{{ partial "banner.html" . }}
+			{{ end }}
+			<div class="mid-col-container">
+				<!--
+				<div id="my-bio-mid-col">
+					{{partial "custom/aboutme.html"}}
+				</div>
+				-->
+				<div id="content" class="inner">
+					{{ $paginator := .Paginate (where .Data.Pages "Type" "post") }}
+					<div itemscope itemtype="http://schema.org/Blog">
+					{{ range $paginator.Pages }}
+				        {{ .Render "summary" }}
+				    {{ end }}
+				    </div>
+				    <nav id="pagenavi">
+					    {{ if $paginator.HasPrev }}
+					        <a href="{{ $paginator.Prev.URL }}" class="prev">前一页</a>
+					    {{ end }}
+					    {{ if $paginator.HasNext }}
+					        <a href="{{ $paginator.Next.URL  }}" class="next">下一页</a>
+					    {{ end }}
+					</nav>
+				</div>
+				<div id="taglist-mid-col">
+					{{partial "custom/taglist.html" .}}
+				</div>
+			</div>
+		</div>
+		<div id="right-col">
+			<!--
+			<div id="my-bio-right-col">
+				{{partial "custom/aboutme.html"}}
+			</div>
+			-->
+			<div id="taglist-right-col">
+				{{partial "custom/taglist.html" .}}
+			</div>
+		</div>
+		<footer id="footer" class="inner">{{ partial "footer.html" . }}</footer>
+	</div>
+	{{ partial "disqus.html" . }}
+	{{ partial "custom/after_footer.html" . }}
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+{{ if .Site.LanguageCode }}
+<html lang="{{ .Site.LanguageCode }}">
+{{ else }}
+<html>
+{{ end }}
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xajDVBSr4m" />
+	<title>{{ if and (.IsPage) (.Title) }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
+	<meta name="generator" content="Hugo 0.14" />
+	<meta name="author" content="{{index .Site.Params "author"}}">
+	<meta name="description" content="{{ if and (.IsPage) (.Title) }}{{ .Summary }}{{else}}{{ index .Site.Params "description"}}{{ end }}">
+	{{ if .Keywords }}<meta name="keywords" content="{{ .Keywords }}">{{ end }}
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ if isset .Site.Params "subscribe_rss" }}
+	<link href='{{ index .Site.Params "subscribe_rss" }}' rel="alternate" title="{{ .Site.Title }}" type="application/atom+xml">
+	{{ end }}
+	<link rel="canonical" href="{{ .Permalink }}">
+	<link href="{{ .Site.BaseURL }}/favicon.png" rel="shortcut icon">
+	<link href="{{ .Site.BaseURL }}/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--<link href="{{ .Site.BaseURL }}/css/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">-->
+	<script src="{{ $.Site.BaseURL }}/js/jquery.min.js"></script>
+	<link href="/css/prism.css" rel="stylesheet" /><!--syntax highlighting-->
+	{{ partial "custom/head.html" . }}
+</head>

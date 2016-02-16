@@ -1,0 +1,621 @@
+<!DOCTYPE HTML>
+
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xajDVBSr4m" />
+	<title>（译）JavaScript简史 - 钢子笔记</title>
+	<meta name="generator" content="Hugo 0.14" />
+	<meta name="author" content="钢子">
+	<meta name="description" content="这篇文章是我练习翻译的，原文参见英语原文地址
+
+JavaScript这门编程语言很有传奇色彩。
+
+
+JavaScript is such a peculiar language.
+
+">
+	
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<link href='/index.xml' rel="alternate" title="钢子笔记" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://gznotes.net/2015/11/06/javascript-brief-history/">
+	<link href="http://gznotes.net/favicon.png" rel="shortcut icon">
+	<link href="http://gznotes.net/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	
+	<script src="http://gznotes.net/js/jquery.min.js"></script>
+	<link href="/css/prism.css" rel="stylesheet" />
+	<script type="text/javascript">
+
+
+
+$.fn.draggable = function() {
+  var offset = null;
+  var start = function(e) {
+	var orig = e.originalEvent;
+	var pos = $(this).position();
+	offset = {
+	  x: orig.changedTouches[0].pageX - pos.left,
+	  y: orig.changedTouches[0].pageY - pos.top
+	};
+  };
+  var moveMe = function(e) {
+	e.preventDefault();
+	var orig = e.originalEvent;
+	$(this).css({
+	  top: orig.changedTouches[0].pageY - offset.y - window.pageYOffset,
+	  left: orig.changedTouches[0].pageX - offset.x
+	});
+  };
+  this.bind("touchstart", start);
+  this.bind("touchmove", moveMe);
+};
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires +";path=/";
+} 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+function isNewVisitor() {
+    var flg = getCookie("gznotes-visited");
+    if (flg === "") {
+		return true;
+    } else {
+		return false;
+    }
+}
+</script>
+</head>
+
+
+<body>
+	<div class="container">
+		<div id="header-col" id="header-col">
+			<div class="intrude-less">
+			<header id="header" class="inner">
+<nav id="main-nav">
+	<div id="site-logo">
+		<img src='/img/myphoto.jpg' alt="Me!" />
+	</div>
+
+	<div id="website-name">
+		<a href="/">钢子笔记</a>
+		<div id="website-subname">记录学习的点点滴滴</div>
+	</div>
+
+	<div id="nav-bar-wrapper">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://gznotes.net/categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://gznotes.net/categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://gznotes.net/categories/杂记/">杂记</a></li>
+		<li><a href="http://gznotes.net/links/">推介</a></li>
+		<li><a href="http://gznotes.net/about/">关于</a></li>
+	</ul>
+</div>
+	</div>
+	<div id="nav-bar-button">导航</div>
+	<div id="nav-bar-animate">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://gznotes.net/categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://gznotes.net/categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://gznotes.net/categories/杂记/">杂记</a></li>
+		<li><a href="http://gznotes.net/links/">推介</a></li>
+		<li><a href="http://gznotes.net/about/">关于</a></li>
+	</ul>
+</div>
+		<a href="#"><div id="nav-gototop">回顶部</div></a>
+	</div>
+
+	<div id="path-info" style="float:right;clear:both;">
+		
+	</div>
+</nav>
+<script type="text/javascript">
+	function hideNavMenu()
+	{
+		if($("#nav-bar-animate").position().left < document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":-500},200);
+		}
+	}
+	function toggleNavMenu()
+	{
+		if($("#nav-bar-animate").position().left > document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":0},200);
+		}
+		else
+		{
+			hideNavMenu();
+		}
+	}
+	$("#nav-bar-button").click(function(){
+		toggleNavMenu();
+	});
+
+	$(document).click(function(){
+		hideNavMenu();
+	});
+	$(document).on("tap",function(){
+	  	hideNavMenu();
+	});
+</script></header>
+			</div>
+		</div>
+		<div id="mid-col">
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+					<div itemscope itemtype="http://schema.org/Blog">
+					<article class="post" itemscope itemtype="http://schema.org/BlogPosting">	
+	<div style="clear:both">
+    <h1 class="title" itemprop="name">（译）JavaScript简史</h1></div>
+	<div style="color:grey;float:left"></div>
+
+	<div class="meta">
+		
+<time datetime='Fri, Nov 6, 2015' data-updated="true" itemprop="datePublished">2015/11/6</time>
+
+	
+		<div class="tags" style="display:inline">
+		
+
+
+	
+	
+	    <a href="http://gznotes.net/tags/javascript"> JavaScript </a>
+	
+
+
+</div>
+
+		
+
+		
+	</div>
+	
+	<div style="clear:both;margin-bottom:1em" class="entry-content" itemprop="articleBody">
+
+<p>这篇文章是我练习翻译的，原文参见<a href="http://foorious.com/articles/brief-history-of-javascript/">英语原文地址</a></p>
+
+<p>JavaScript这门编程语言很有传奇色彩。</p>
+
+<blockquote>
+<p>JavaScript is such a peculiar language.</p>
+</blockquote>
+
+<p>他是唯一一门基于prototype（而非class）的主流语言。很多人都对他有误解。人们曾经挺瞧不起这门语言，甚至争论他到底是不是一门真正的编程语言。可现在他正被广泛应用，包括在服务器端（node.js）。</p>
+
+<blockquote>
+<p>It’s <strong>the only mainstream language that uses prototypes instead of classes</strong>. It’s widely misunderstood.
+Until a few years ago people would look down to it and even debate whether it was a real programming language or not—and now it’s used all over, including on servers (Node.js).</p>
+</blockquote>
+
+<p>JavaScript如今已经变成了一门至关重要的编程语言。
+他被广泛应用于各种联网设备，成为web平台（platform）的支柱和各种web/mobile应用（applications）的基础。借助于node.js，javascript在服务器端也大有用武之地，开始崭露头角。</p>
+
+<blockquote>
+<p>JavaScript has become an extremely important language. It’s ubiquitous in web-capable devices, a pillar of the Web Platform and the base for most web and mobile applications. Thanks to Node.js, it’s making its way on the server as well.</p>
+</blockquote>
+
+<p>为了理解javascript，咱们得先简单回顾一下浏览器和web的发展历程。</p>
+
+<blockquote>
+<p>To understand JavaScript, however, we have to take a little detour and go back to the history of browsers and the Web.</p>
+</blockquote>
+
+<h3 id="关于web:8ab2a088cb75a2d5ac5127849d769cad">关于Web</h3>
+
+<p>1990年末，Tim Berners-Lee发明了World Wide Web.</p>
+
+<p>internet和web这两个词虽然经常被互换使用，感觉没啥差别，其实他们并不是不是一个东西。internet指的是有形的网络本身，出现也大大早于web。而web（world wide web）是我们每天在看，在用的东西：一个由无数超文本（hypertext）文档连成的网络。通过浏览器或者其他专用程序，我们每天都在访问这个巨大网络里的信息。</p>
+
+<p>internet刚刚出现后面临的一个问题是，由于电脑的差异性，虽然电脑可以互联，但是网络上的电脑却很可能无法互相沟通。这话放在21世纪说可能有点不可思议，不过早年标准化还没普及，好比虽然在海底铺了光缆，不懂外语的话，还是听不懂大洋对岸的洋人在说啥。一台电脑通过tcp/ip协议连接到另一台电脑了，但是文件格式不同，也就无法打开文件。这个问题导致虽然联网了电脑间很难协作和共享信息。</p>
+
+<p>web就是用来解决这个问题，让当时的科学家可以互相共享信息。</p>
+
+<p>解决方法具有革命性又很容易理解：把文档内容用一种通用语言（HTML）编码，然后用一个专门软件（浏览器）来解释，显示这个文档。每种电脑都有自己专门的浏览器，保证按照作者初衷正确显示文档，而文档本身保持不变。很简洁吧！</p>
+
+<p>所以呢，Tim Berners-Lee发明了web、第一个web服务器、第一个web浏览器（名字就叫WorldWideWeb）、第一个网页编辑器（WorldWideWeb本身也是个网页编辑器）还有第一个网页（其中介绍了他的相关工作内容）。</p>
+
+<h3 id="browser-wars:8ab2a088cb75a2d5ac5127849d769cad">Browser wars</h3>
+
+<p><strong><em>Mosaic</em></strong></p>
+
+<p>Tim Berners-Lee （还有很多人）当时只是把web当成科学家和研究者的信息交换工具。幸运的是，还是有些人注意到了web更大的潜力。</p>
+
+<p>一群伊利诺伊大学厄巴纳-香槟分校( University of Illinois Urbana-Champaign )的学生做出了Mosaic，这个浏览器软件另 World Wide Web流行起来。</p>
+
+<p>原因可能有许多，不过主要的原因可能是他们没有束缚于 Berners-Lee的想法，更进一步增加了IMG tag（想想一个网页如果没有任何图片会多枯燥。译者注），这另网页作者可以做出更漂亮的网页。</p>
+
+<p>这个浏览器软件广受欢迎，很快成为最流行的浏览器。Mosaic browser (1993)</p>
+
+<p><strong><em>Netscape Navigator</em></strong></p>
+
+<p>网景（ Netscape）公司挖走了Mosaic的创作者，让他们重新实现了一个浏览器，取名 Navigator。这个浏览器的生意让 Navigator 赚了一大笔钱。</p>
+
+<p>人们之所以愿意花钱买 Navigator，是因为 Navigator更加突破了 Berners-Lee的想法，并且实现了很多人们需要的好东西（原文写的useless，应该是笔误吧），比如很多可选字体和其他一些我们今天已经是标配的东西。</p>
+
+<p><strong><em>Microsoft</em></strong></p>
+
+<p>Navigator当时很酷的，在所有操作系统都有几近相同的显示效果。另一个当时非常棒的功能是，通过一个基于web的系统（ web-based system ）用户可以编辑网络上其他电脑上的文件，即使那台电脑使用不同的操作系统。</p>
+
+<p>当然，微软容忍不了这个，因为这对windows业务不利。</p>
+
+<p>所以，微软发布了 Internet Explorer并且免费提供。之后还开始了一场臭名卓著的浏览器之战（ browser wars ）。</p>
+
+<h3 id="javascript:8ab2a088cb75a2d5ac5127849d769cad">JavaScript</h3>
+
+<p>总算讲到正题了！</p>
+
+<p>之后呢， Netscape就开发了 JavaScript，起初名字叫 LiveScript。</p>
+
+<p>LiveScript对 Netscape 公司至关重要。他们想实现一种类似苹果公司 HyperCard 的产品并把它加到浏览器里（ HyperCard 是 Apple Macintosh and Apple IIGS 上的一款编程工具，另开发者更容易开发软件）。另外， LiveScript 也可以运行于服务器端。</p>
+
+<p>这样， Netscape就可以用他们受欢迎的浏览器占据客户端业务市场，以及服务端市场。</p>
+
+<h3 id="java-scheme-and-self:8ab2a088cb75a2d5ac5127849d769cad">Java, Scheme, and Self</h3>
+
+<p>Netscape找到Brendan Eich来开发LiveScript。 Brendan Eich想基于Scheme开发LiveScript，可是Netscape的管理层认为人们不会喜欢 Scheme 的语法，让 Eich 把LiveScript设计得更像Java，Visual BASIC等当时受欢迎的语言。</p>
+
+<p>所以呢，LiveScript借用了Java的语法(因为不得不这样)， Scheme语言的函数模型(function model)和Self语言的基于prototype的特性( prototypical nature )。</p>
+
+<p>由于Netscape公司当时形式紧急， LiveScript语言从开始开发到发布只用了2个星期！！</p>
+
+<h3 id="sun-以及-javascript-名字的由来:8ab2a088cb75a2d5ac5127849d769cad">Sun, 以及“JavaScript”名字的由来</h3>
+
+<p>Netscape对微软的OS业务造成了威胁。微软开始采取动作后，Netscape找到了Sun联手进行反击。</p>
+
+<p>Sun和Netscape达成协议过程中有件事很有意思，那就是关于怎么对待LiveScript。Sun想用Java取而代之，但是Netscape不舍得自己的这个宝。</p>
+
+<p>然后呢，有个人（具体不详）想到个好主意：将LiveScript重命名为JavaScript。当然“Java”是Sun的注册商标，不过他们当时他们对这个提议也很赞同，给了Netscapte许可来使用“JavaScript”这个名字。</p>
+
+<p>成交！</p>
+
+<h3 id="microsoft-s-jscript:8ab2a088cb75a2d5ac5127849d769cad">Microsoft’s JScript</h3>
+
+<p>当然，微软的浏览器也需要个脚本语言。所以他们就模仿(reverse-engineer)JavaScript做了一个，集成到Internet  Explorer里了。</p>
+
+<p>因为“Java”这个名字是需要license的，他们只好取名JScript，其实和JavaScript完全是一个东西。</p>
+
+<h3 id="ecmascript:8ab2a088cb75a2d5ac5127849d769cad">ECMAScript</h3>
+
+<p><em>下面还没翻译</em></p>
+
+<p>With all this mess, JavaScript needed to be standardized. So, Netscape looked for a body that would do just that. The W3C refused to do it, and eventually they ended up at the European ECMA (weird).</p>
+
+<p>ECMA did standardize the language, but didn’t fix the obviously awful and confusing “JavaScript” name. The thing is, they didn’t know what to call it. So, they just published it with their working name: ECMAScript.</p>
+
+<p>JavaScript, JScript, and ECMAScript are sometimes thought to be different things, but are simply three different names that mean the same thing: JavaScript.
+An unique language
+JavaScript was (and is) truly unique.</p>
+
+<p>It doesn’t use classes, for instance: in every other programming language, objects are instances of a class, and inheritance works by extending an object’s class. Instead, JavaScript uses prototypes, which means that an object can be augmented by using other objects directly, without passing by classes.</p>
+
+<p>This is really awesome, and if you use prototypes you can still do classes (you can’t do the other way around), but inheriting directly from objects—along with its great function model—are what makes JavaScript such a powerful language.</p>
+
+<p>JavaScript (perhaps because of it “missing” classes?) used to be considered by many as a joke, and a language for amateurs.</p>
+
+<p>When Google popularized Ajax, JavaScript started gaining a lot of popularity, to eventually become one of the most popular programming languages in use today.
+Current version</p>
+
+<p>ECMA is still in charge of the language. While at the time of writing (Oct, 2014) ES6 is the latest release and ES7 is already in the works, the most recent version that has broad browser support is ES5 (if you don’t need to support IE8). Old browsers support ES3 (ES4 was abandoned and was never released).</p>
+
+<p>ES5 is pretty great. It cleaned JavaScript up from a lot of design errorsthat the language  shipped with because of its quick/premature release. ES5 introduces “strict mode”, which allows developers to specify that they only wish to use features from the modern standard, and a lot of other interesting additions.</p>
+</div>
+		
+	
+	<div style="clear:both;border-top:1px solid lightgrey">
+		<div style="float:left">
+		前一篇：<a href="http://gznotes.net/2015/11/07/static-in-c/">C语言中static的用法举例</a>
+		
+		</div>
+		<div style="float:right">
+		后一篇：没有了
+		</div>
+	</div>
+	<div style="clear:both;margin-top:2em;">
+		<div id="guess-you-like-list-title">猜你喜欢:</div>
+		<ul id="guess-you-like-list">
+		
+		
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+		</ul>
+	</div>
+	<div id="latest-posts">
+		<div style="margin-top:1em;">最新文章:</div>
+		<ul id="recent-post-list">
+		
+			<li><a href="http://gznotes.net/2016/02/10/15-rules-for-writing-quality-code/">（译）15 Rules for Writing Quality Code</a></li>
+			
+		
+			<li><a href="http://gznotes.net/2016/02/10/skills-needed-for-students/">刚毕业的新人缺什么技能？</a></li>
+			
+		
+			<li><a href="http://gznotes.net/2016/02/10/big-company-or-small-company/">毕业生就业，大公司还是小公司？</a></li>
+			
+		
+			<li><a href="http://gznotes.net/2016/02/10/come-to-japan-first-time/">首次来日本的注意事项</a></li>
+			
+		
+			<li><a href="http://gznotes.net/2016/02/06/static-notify/">Static控件的一个隐蔽特性</a></li>
+			
+		
+		</ul>
+	</div>
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			if(document.getElementById("guess-you-like-list").children.length<=0)
+			{
+				document.getElementById("guess-you-like-list-title").style.display = "none";
+			}
+		});
+	</script>
+
+
+	
+		<div class="ds-thread" data-thread-key="/2015/11/06/javascript-brief-history/" data-title="（译）JavaScript简史" data-url="http://gznotes.net/2015/11/06/javascript-brief-history/"></div>
+	
+	
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"gznotes"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	
+</article>
+					
+						<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	
+	</div>
+	
+</div>
+
+					
+					
+					
+
+				    </div>
+				</div>
+			</div>
+		</div>
+		<div id="right-col">
+			<div class="quotation-right-col">
+			<p>The higher you go, the more impact you have.</p>
+			</div>
+			<div id="taglist-right-col">
+					<div class="tags-list">
+		<div class="common-title">tags:</div>
+		<ul>
+		
+			<li>
+				<a href="/tags/c/c">
+				
+					c/c&#43;&#43;
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95">
+				
+					职业发展
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E4%BA%86%E8%A7%A3%E6%97%A5%E6%9C%AC">
+				
+					了解日本
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/win32">
+				
+					win32
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/javascript">
+				
+					javascript
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/cookie">
+				
+					cookie
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/rss">
+				
+					rss
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8">
+				
+					软件品质
+				
+				</a>
+			</li>
+		
+		</ul>
+	</div>
+			</div>
+		</div>
+		<footer id="footer" class="inner"><div id="copyright-area">
+	Copyright &copy; 2016
+	
+		钢子笔记
+	
+</div>
+<div id="footer-link-area">
+	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-70040004-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+
+
+</div>
+
+<script src="/js/prism.js" async></script>
+<script type="text/javascript">
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position > 900 || 
+		position > bottom*0.67 ) 
+		{
+			var newVisitor = isNewVisitor();
+			if(newVisitor === true)
+			{
+				$("#invite-questionnaire").animate({right:"0", bottom:"0"}, 100);
+				setCookie("gznotes-visited","true", 30);
+			}
+		}
+		
+	});
+	function hideQuestionnaire()
+	{
+		$("#invite-questionnaire").css("display","none");
+	}
+</script>
+<div id="invite-questionnaire">
+	<span>可否占用您30秒钟时间，请您给本站的改善提些意见？<a href="https://www.wenjuan.com/s/AFbMJj/">好</a></span><br>
+	<span>也可稍后点击页面底部“意见反馈”。<a href="#" onclick="hideQuestionnaire()">稍后再说</a></span>
+</div>
+<div><a href="#"><div id="gototop">回顶部</div></a></div>
+
+	<script type="text/javascript">
+	
+	
+	$("#gototop").draggable();
+	
+	
+
+	</script>
+</footer>
+	</div>
+
+	
+</body>
+</html>

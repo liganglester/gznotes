@@ -1,0 +1,493 @@
+<!DOCTYPE HTML>
+
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xajDVBSr4m" />
+	<title>博文素材 - 钢子笔记</title>
+	<meta name="generator" content="Hugo 0.14" />
+	<meta name="author" content="钢子">
+	<meta name="description" content="用于记录博文素材的页面">
+	
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<link href='/index.xml' rel="alternate" title="钢子笔记" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://localhost:1313/topost/">
+	<link href="http://localhost:1313//favicon.png" rel="shortcut icon">
+	<link href="http://localhost:1313//css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	
+	<script src="http://localhost:1313//js/jquery.min.js"></script>
+	<link href="/css/prism.css" rel="stylesheet" />
+	<script type="text/javascript">
+
+
+
+$.fn.draggable = function() {
+  var offset = null;
+  var start = function(e) {
+	var orig = e.originalEvent;
+	var pos = $(this).position();
+	offset = {
+	  x: orig.changedTouches[0].pageX - pos.left,
+	  y: orig.changedTouches[0].pageY - pos.top
+	};
+  };
+  var moveMe = function(e) {
+	e.preventDefault();
+	var orig = e.originalEvent;
+	$(this).css({
+	  top: orig.changedTouches[0].pageY - offset.y - window.pageYOffset,
+	  left: orig.changedTouches[0].pageX - offset.x
+	});
+  };
+  this.bind("touchstart", start);
+  this.bind("touchmove", moveMe);
+};
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires +";path=/";
+} 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+function isNewVisitor() {
+    var flg = getCookie("gznotes-visited");
+    if (flg === "") {
+		return true;
+    } else {
+		return false;
+    }
+}
+</script>
+</head>
+
+
+<body>
+	<div class="container">
+		<div id="header-col" id="header-col">
+			<div class="intrude-less">
+			<header id="header" class="inner">
+<nav id="main-nav">
+	<div id="site-logo">
+		<img src='/img/myphoto.jpg' alt="Me!" />
+	</div>
+
+	<div id="website-name">
+		<a href="/">钢子笔记</a>
+		<div id="website-subname">记录学习的点点滴滴</div>
+	</div>
+
+	<div id="nav-bar-wrapper">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://localhost:1313//categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://localhost:1313//categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://localhost:1313//categories/杂记/">杂记</a></li>
+		<li><a href="http://localhost:1313//links/">推介</a></li>
+		<li><a href="http://localhost:1313//about/">关于</a></li>
+	</ul>
+</div>
+	</div>
+	<div id="nav-bar-button">导航</div>
+	<div id="nav-bar-animate">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://localhost:1313//categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://localhost:1313//categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://localhost:1313//categories/杂记/">杂记</a></li>
+		<li><a href="http://localhost:1313//links/">推介</a></li>
+		<li><a href="http://localhost:1313//about/">关于</a></li>
+	</ul>
+</div>
+		<a href="#"><div id="nav-gototop">回顶部</div></a>
+	</div>
+
+	<div id="path-info" style="float:right;clear:both;">
+		
+	</div>
+</nav>
+<script type="text/javascript">
+	function hideNavMenu()
+	{
+		if($("#nav-bar-animate").position().left < document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":-500},200);
+		}
+	}
+	function toggleNavMenu()
+	{
+		if($("#nav-bar-animate").position().left > document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":0},200);
+		}
+		else
+		{
+			hideNavMenu();
+		}
+	}
+	$("#nav-bar-button").click(function(){
+		toggleNavMenu();
+	});
+
+	$(document).click(function(){
+		hideNavMenu();
+	});
+	$(document).on("tap",function(){
+	  	hideNavMenu();
+	});
+</script></header>
+			</div>
+		</div>
+		<div id="mid-col">
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+					<div itemscope itemtype="http://schema.org/Blog">
+					<article class="post" itemscope itemtype="http://schema.org/BlogPosting">	
+	<div style="clear:both">
+    <h1 class="title" itemprop="name">博文素材</h1></div>
+	<div style="color:grey;float:left"></div>
+
+	<div class="meta">
+		
+<time datetime='Mon, Nov 16, 2015' data-updated="true" itemprop="datePublished">2015/11/16</time>
+
+	
+		
+
+		
+
+		
+	</div>
+	
+	<div style="clear:both;margin-bottom:1em" class="entry-content" itemprop="articleBody"><p>用于记录博文素材的页面</p>
+</div>
+		
+	
+	<div style="clear:both;border-top:1px solid lightgrey">
+		<div style="float:left">
+		前一篇：<a href="http://localhost:1313/todo/">网站建设</a>
+		
+		</div>
+		<div style="float:right">
+		后一篇：<a href="http://localhost:1313/links/">links</a>
+		
+		</div>
+	</div>
+	<div style="clear:both;margin-top:2em;">
+		<div id="guess-you-like-list-title">猜你喜欢:</div>
+		<ul id="guess-you-like-list">
+		
+		
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+		</ul>
+	</div>
+	<div id="latest-posts">
+		<div style="margin-top:1em;">最新文章:</div>
+		<ul id="recent-post-list">
+		
+			<li><a href="http://localhost:1313/2016/02/10/15-rules-for-writing-quality-code/">（译）15 Rules for Writing Quality Code</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/10/skills-needed-for-students/">刚毕业的新人缺什么技能？</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/10/big-company-or-small-company/">毕业生就业，大公司还是小公司？</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/10/come-to-japan-first-time/">首次来日本的注意事项</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/06/static-notify/">Static控件的一个隐蔽特性</a></li>
+			
+		
+		</ul>
+	</div>
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			if(document.getElementById("guess-you-like-list").children.length<=0)
+			{
+				document.getElementById("guess-you-like-list-title").style.display = "none";
+			}
+		});
+	</script>
+
+
+	
+		<div class="ds-thread" data-thread-key="/topost/" data-title="博文素材" data-url="http://localhost:1313/topost/"></div>
+	
+	
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"gznotes"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	
+</article>
+					
+						<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	
+	</div>
+	
+</div>
+
+					
+					
+					
+
+				    </div>
+				</div>
+			</div>
+		</div>
+		<div id="right-col">
+			<div class="quotation-right-col">
+			<p>The higher you go, the more impact you have.</p>
+			</div>
+			<div id="taglist-right-col">
+					<div class="tags-list">
+		<div class="common-title">tags:</div>
+		<ul>
+		
+			<li>
+				<a href="/tags/c/c">
+				
+					c/c&#43;&#43;
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95">
+				
+					职业发展
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E4%BA%86%E8%A7%A3%E6%97%A5%E6%9C%AC">
+				
+					了解日本
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/win32">
+				
+					win32
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/javascript">
+				
+					javascript
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/rss">
+				
+					rss
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8">
+				
+					软件品质
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/cookie">
+				
+					cookie
+				
+				</a>
+			</li>
+		
+		</ul>
+	</div>
+			</div>
+		</div>
+		<footer id="footer" class="inner"><div id="copyright-area">
+	Copyright &copy; 2016
+	
+		钢子笔记
+	
+</div>
+<div id="footer-link-area">
+	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-70040004-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+
+<script>
+(function(){
+	if(window.location.hostname === "localhost")
+	{
+		document.write("<h1>localhost, donot push to baidu</h1>");
+		return;
+	}
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+</div>
+
+<script src="/js/prism.js" async></script>
+<script type="text/javascript">
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position > 900 || 
+		position > bottom*0.67 ) 
+		{
+			var newVisitor = isNewVisitor();
+			if(newVisitor === true)
+			{
+				$("#invite-questionnaire").animate({right:"0", bottom:"0"}, 100);
+				setCookie("gznotes-visited","true", 30);
+			}
+		}
+		
+	});
+	function hideQuestionnaire()
+	{
+		$("#invite-questionnaire").css("display","none");
+	}
+</script>
+<div id="invite-questionnaire">
+	<span>可否占用您30秒钟时间，请您给本站的改善提些意见？<a href="https://www.wenjuan.com/s/AFbMJj/">好</a></span><br>
+	<span>也可稍后点击页面底部“意见反馈”。<a href="#" onclick="hideQuestionnaire()">稍后再说</a></span>
+</div>
+<div><a href="#"><div id="gototop">回顶部</div></a></div>
+
+	<script type="text/javascript">
+	
+	
+	$("#gototop").draggable();
+	
+	
+
+	</script>
+</footer>
+	</div>
+
+	
+<script data-no-instant>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
+</html>

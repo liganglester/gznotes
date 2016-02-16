@@ -1,0 +1,559 @@
+<!DOCTYPE HTML>
+
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="baidu-site-verification" content="xajDVBSr4m" />
+	<title>Static控件的一个隐蔽特性 - 钢子笔记</title>
+	<meta name="generator" content="Hugo 0.14" />
+	<meta name="author" content="钢子">
+	<meta name="description" content="Static控件常用来显示文字列，一般不会和用户有别的交互。
+
+但是，从WindowsVista之后，多了了一个很多人不知道的功能：双击带有SS_NOTIFY属性的Static控件，windows会将Static内容copy到剪贴板。
+">
+	
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<link href='/index.xml' rel="alternate" title="钢子笔记" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://localhost:1313/2016/02/06/static-notify/">
+	<link href="http://localhost:1313//favicon.png" rel="shortcut icon">
+	<link href="http://localhost:1313//css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	
+	<script src="http://localhost:1313//js/jquery.min.js"></script>
+	<link href="/css/prism.css" rel="stylesheet" />
+	<script type="text/javascript">
+
+
+
+$.fn.draggable = function() {
+  var offset = null;
+  var start = function(e) {
+	var orig = e.originalEvent;
+	var pos = $(this).position();
+	offset = {
+	  x: orig.changedTouches[0].pageX - pos.left,
+	  y: orig.changedTouches[0].pageY - pos.top
+	};
+  };
+  var moveMe = function(e) {
+	e.preventDefault();
+	var orig = e.originalEvent;
+	$(this).css({
+	  top: orig.changedTouches[0].pageY - offset.y - window.pageYOffset,
+	  left: orig.changedTouches[0].pageX - offset.x
+	});
+  };
+  this.bind("touchstart", start);
+  this.bind("touchmove", moveMe);
+};
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires +";path=/";
+} 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+function isNewVisitor() {
+    var flg = getCookie("gznotes-visited");
+    if (flg === "") {
+		return true;
+    } else {
+		return false;
+    }
+}
+</script>
+</head>
+
+
+<body>
+	<div class="container">
+		<div id="header-col" id="header-col">
+			<div class="intrude-less">
+			<header id="header" class="inner">
+<nav id="main-nav">
+	<div id="site-logo">
+		<img src='/img/myphoto.jpg' alt="Me!" />
+	</div>
+
+	<div id="website-name">
+		<a href="/">钢子笔记</a>
+		<div id="website-subname">记录学习的点点滴滴</div>
+	</div>
+
+	<div id="nav-bar-wrapper">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://localhost:1313//categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://localhost:1313//categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://localhost:1313//categories/杂记/">杂记</a></li>
+		<li><a href="http://localhost:1313//links/">推介</a></li>
+		<li><a href="http://localhost:1313//about/">关于</a></li>
+	</ul>
+</div>
+	</div>
+	<div id="nav-bar-button">导航</div>
+	<div id="nav-bar-animate">
+		
+<div id="nav-items">
+	<ul class="main">
+		<li id="nav-item-tech"><a href="http://localhost:1313//categories/技术/">技术</a></li>
+		<li id="nav-item-lang"><a href="http://localhost:1313//categories/外语/">外语</a></li>
+		<li id="nav-item-other"><a href="http://localhost:1313//categories/杂记/">杂记</a></li>
+		<li><a href="http://localhost:1313//links/">推介</a></li>
+		<li><a href="http://localhost:1313//about/">关于</a></li>
+	</ul>
+</div>
+		<a href="#"><div id="nav-gototop">回顶部</div></a>
+	</div>
+
+	<div id="path-info" style="float:right;clear:both;">
+		
+	</div>
+</nav>
+<script type="text/javascript">
+	function hideNavMenu()
+	{
+		if($("#nav-bar-animate").position().left < document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":-500},200);
+		}
+	}
+	function toggleNavMenu()
+	{
+		if($("#nav-bar-animate").position().left > document.body.clientWidth)
+		{
+			$("#nav-bar-animate").animate({"right":0},200);
+		}
+		else
+		{
+			hideNavMenu();
+		}
+	}
+	$("#nav-bar-button").click(function(){
+		toggleNavMenu();
+	});
+
+	$(document).click(function(){
+		hideNavMenu();
+	});
+	$(document).on("tap",function(){
+	  	hideNavMenu();
+	});
+</script></header>
+			</div>
+		</div>
+		<div id="mid-col">
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+					<div itemscope itemtype="http://schema.org/Blog">
+					<article class="post" itemscope itemtype="http://schema.org/BlogPosting">	
+	<div style="clear:both">
+    <h1 class="title" itemprop="name">Static控件的一个隐蔽特性</h1></div>
+	<div style="color:grey;float:left"></div>
+
+	<div class="meta">
+		
+<time datetime='Sat, Feb 6, 2016' data-updated="true" itemprop="datePublished">2016/2/6</time>
+
+	
+		<div class="tags" style="display:inline">
+		
+
+
+	
+	
+	    <a href="http://localhost:1313//tags/win32"> Win32 </a>
+	
+
+
+</div>
+
+		
+
+		
+	</div>
+	
+	<div style="clear:both;margin-bottom:1em" class="entry-content" itemprop="articleBody">
+
+<p>Static控件常用来显示文字列，一般不会和用户有别的交互。</p>
+
+<p>但是，从WindowsVista之后，多了了一个很多人不知道的功能：<br>双击带有SS_NOTIFY属性的Static控件，windows会将Static内容copy到剪贴板。</p>
+
+<h2 id="到底怎么回事:dc6047e2f849f9f1b53b738904bb61f6">到底怎么回事？</h2>
+
+<p>一个带有SS_NOTIFY属相的Static控件，比较常见的处理是:<br>在收到WS_LBUTTONDBLCLK消息后，向父窗口发WM_COMMAND告知自己被双击(STN_DBLCLK)。</p>
+
+<p>在Vista之后，还会GetWindowText()得到Static的文字列，放到剪贴板里。
+挺贴心，不过有点隐蔽。有时候也添了点小麻烦。</p>
+
+<h2 id="一点麻烦:dc6047e2f849f9f1b53b738904bb61f6">一点麻烦</h2>
+
+<p>在Vista之前开发的软件，有的是依赖双击Static后Static向父窗口发的WM_COMMAND来弹出其他画面的。
+那么，下面的情况就让用户有点意外了：</p>
+
+<ol>
+<li>在其他程序里copy一点内容</li>
+<li>双击Static</li>
+<li>在新打开的画面粘贴刚刚copy的内容</li>
+</ol>
+
+<p>上面第3部贴出来的是Static的文字列，用户就会抱怨：这是肿么回事呢？？</p>
+
+<h2 id="怎么解决:dc6047e2f849f9f1b53b738904bb61f6">怎么解决？</h2>
+
+<p>虽说这是微软加的功能，但是客户如果不喜欢，就得想办法解决。</p>
+
+<p>简单讲就是将Static控件的消息处理函数(WndProc)替换成自己写的。
+在自己写的WndProc里，对WS_LBUTTONDBLCLK做特殊处理。</p>
+
+<pre><code class="language-cpp">BOOL disableCopyOnDblClickStatic(HANDLE hStatic)
+{
+	// 得到默认的WndProc
+	WNDPROC pOldWndProc = (WNDPROC)GetWindowLong(hStatic, GWL_WNDPROC);
+	// 让Static自己管理这个默认WndProc：这样在新WndProc里，就可以得到了。
+	SetWindowProc(hStatic,GWL_USERDATA, (LONG)pOldWndProc);
+
+	// 下面newWndProc是给Static新写的WndProc，
+	// 收到WS_LBUTTONDBLCLK后，只给父窗口发个WM_COMMAND就直接返回。
+	// 其他消息通过CallWndProc函数继续使用windows默认处理
+	SetWindowProc(hStatic,GWL_WNDPROC, (LONG)newWndProc);
+}
+</code></pre>
+
+<h2 id="这么修改的优缺点:dc6047e2f849f9f1b53b738904bb61f6">这么修改的优缺点</h2>
+
+<p>缺点：需要针对每个有问题的Static控件进行修改。</p>
+
+<p>优点：打击面不会太大，因为不能保证所有画面里，这个动作都被认为是bug(那样的话，就显得微软太蠢了哈。。)</p>
+</div>
+		
+	
+	<div style="clear:both;border-top:1px solid lightgrey">
+		<div style="float:left">
+		前一篇：<a href="http://localhost:1313/2016/02/10/come-to-japan-first-time/">首次来日本的注意事项</a>
+		
+		</div>
+		<div style="float:right">
+		后一篇：<a href="http://localhost:1313/2015/12/07/javascript-new-visitor/">用javascript&#43;cookie判断用户是否首次访问网站</a>
+		
+		</div>
+	</div>
+	<div style="clear:both;margin-top:2em;">
+		<div id="guess-you-like-list-title">猜你喜欢:</div>
+		<ul id="guess-you-like-list">
+		
+		
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+				<li style="padding-top:0.35em"><a href="http://localhost:1313/2015/11/07/radio-focus-in-dialog/">关于对话框中单选框焦点设定的一点调查</a></li>
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+			
+			
+			
+		
+		</ul>
+	</div>
+	<div id="latest-posts">
+		<div style="margin-top:1em;">最新文章:</div>
+		<ul id="recent-post-list">
+		
+			<li><a href="http://localhost:1313/2016/02/10/15-rules-for-writing-quality-code/">（译）15 Rules for Writing Quality Code</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/10/skills-needed-for-students/">刚毕业的新人缺什么技能？</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/10/big-company-or-small-company/">毕业生就业，大公司还是小公司？</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/10/come-to-japan-first-time/">首次来日本的注意事项</a></li>
+			
+		
+			<li><a href="http://localhost:1313/2016/02/06/static-notify/">Static控件的一个隐蔽特性</a></li>
+			
+		
+		</ul>
+	</div>
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			if(document.getElementById("guess-you-like-list").children.length<=0)
+			{
+				document.getElementById("guess-you-like-list-title").style.display = "none";
+			}
+		});
+	</script>
+
+
+	
+		<div class="ds-thread" data-thread-key="/2016/02/06/static-notify/" data-title="Static控件的一个隐蔽特性" data-url="http://localhost:1313/2016/02/06/static-notify/"></div>
+	
+	
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"gznotes"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	
+</article>
+					
+						<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	
+	</div>
+	
+</div>
+
+					
+					
+					
+
+				    </div>
+				</div>
+			</div>
+		</div>
+		<div id="right-col">
+			<div class="quotation-right-col">
+			<p>The higher you go, the more impact you have.</p>
+			</div>
+			<div id="taglist-right-col">
+					<div class="tags-list">
+		<div class="common-title">tags:</div>
+		<ul>
+		
+			<li>
+				<a href="/tags/c/c">
+				
+					c/c&#43;&#43;
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/win32">
+				
+					win32
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/javascript">
+				
+					javascript
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95">
+				
+					职业发展
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E4%BA%86%E8%A7%A3%E6%97%A5%E6%9C%AC">
+				
+					了解日本
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/cookie">
+				
+					cookie
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/rss">
+				
+					rss
+				
+				</a>
+			</li>
+		
+			<li>
+				<a href="/tags/%E8%BD%AF%E4%BB%B6%E5%93%81%E8%B4%A8">
+				
+					软件品质
+				
+				</a>
+			</li>
+		
+		</ul>
+	</div>
+			</div>
+		</div>
+		<footer id="footer" class="inner"><div id="copyright-area">
+	Copyright &copy; 2016
+	
+		钢子笔记
+	
+</div>
+<div id="footer-link-area">
+	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-70040004-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+
+<script>
+(function(){
+	if(window.location.hostname === "localhost")
+	{
+		document.write("<h1>localhost, donot push to baidu</h1>");
+		return;
+	}
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+</div>
+
+<script src="/js/prism.js" async></script>
+<script type="text/javascript">
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position > 900 || 
+		position > bottom*0.67 ) 
+		{
+			var newVisitor = isNewVisitor();
+			if(newVisitor === true)
+			{
+				$("#invite-questionnaire").animate({right:"0", bottom:"0"}, 100);
+				setCookie("gznotes-visited","true", 30);
+			}
+		}
+		
+	});
+	function hideQuestionnaire()
+	{
+		$("#invite-questionnaire").css("display","none");
+	}
+</script>
+<div id="invite-questionnaire">
+	<span>可否占用您30秒钟时间，请您给本站的改善提些意见？<a href="https://www.wenjuan.com/s/AFbMJj/">好</a></span><br>
+	<span>也可稍后点击页面底部“意见反馈”。<a href="#" onclick="hideQuestionnaire()">稍后再说</a></span>
+</div>
+<div><a href="#"><div id="gototop">回顶部</div></a></div>
+
+	<script type="text/javascript">
+	
+	
+	$("#gototop").draggable();
+	
+	
+
+	</script>
+</footer>
+	</div>
+
+	
+<script data-no-instant>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
+</html>

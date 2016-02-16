@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>C/C on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://localhost:1313/tags/c/c/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Thu, 19 Nov 2015 06:22:27 JST</updated>
+    
+    <item>
+      <title>回调(callback)函数简介</title>
+      <link>http://localhost:1313/2015/11/19/callback-function/</link>
+      <pubDate>Thu, 19 Nov 2015 06:22:27 JST</pubDate>
+      
+      <guid>http://localhost:1313/2015/11/19/callback-function/</guid>
+      <description>
+
+&lt;p&gt;callback函数在软件设计中被广泛使用。可以说没有他就没有各种灵活的软件结构。
+什么是callback函数？有哪些常见用法？&lt;/p&gt;
+
+&lt;h2 id=&#34;什么是callback函数:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;什么是callback函数&lt;/h2&gt;
+
+&lt;p&gt;callback函数打个比方就是“卧底”。
+即：A模块定义函数f，交给B模块调用。B模块掌握调用f的时机。f执行时与A模块有信息交互。&lt;/p&gt;
+
+&lt;p&gt;一般来讲，因为f定义于A，所以会了解A的部分内部数据结构，也就方便其在执行时更新数据。&lt;/p&gt;
+
+&lt;p&gt;当然，这只是一种可能性，f执行时也可能仅仅是向A发条消息就return了。&lt;/p&gt;
+
+&lt;h2 id=&#34;举例1-windows的消息处理函数:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;举例1：windows的消息处理函数&lt;/h2&gt;
+
+&lt;p&gt;写过win32画面程序的同学应该都知道，我们写画面程序需要定义一个windowProc函数，处理windows消息。
+这个函数就是一个callback函数。&lt;/p&gt;
+
+&lt;p&gt;这个函数使我们的程序定义的，通过RegisterClass()函数将这个windowProc函数登录到windows系统。
+windows系统在收到和我们窗口相关的消息时，就会调用我们提供的windowProc函数。&lt;/p&gt;
+
+&lt;h2 id=&#34;举例2-避免模块间循环依赖:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;举例2：避免模块间循环依赖&lt;/h2&gt;
+
+&lt;p&gt;软件系统有很多是分层的，像是积木一样一层一层。。
+一般来讲，都是上层利用下层的服务，调用下层提供的API。&lt;/p&gt;
+
+&lt;p&gt;但是个别情况，下层也可能调用上层API，这样两个模块就循环依赖了！&lt;/p&gt;
+
+&lt;p&gt;这个时候callback的解决办法是：下层提供一个callback登录函数，让上层提供一个callback函数。
+这样形式上仍然是上层依赖下层，而下层就可以通过callback函数利用上层的服务了。&lt;/p&gt;
+
+&lt;h2 id=&#34;举例3-c-的event:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;举例3： C#的event&lt;/h2&gt;
+
+&lt;p&gt;最近学了一点C#，发现画面类支持登录event，语法非常简单，记不清了，类似于这样吧：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;form.clickOK += handleOK()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;handleOK()是业务层定义的函数。&lt;/p&gt;
+
+&lt;p&gt;这样，画面层就可以在不了解业务层的前提下，将画面时间传递给业务层了！&lt;/p&gt;
+
+&lt;p&gt;要知道，“不知道”这件事在软件设计中很重要。也就是所谓的“关心分离” Separation of concerns.
+各管各的，能不知道的一定不要知道，信息知道多了也就是有耦合了，给bug提供了温床。&lt;/p&gt;
+
+&lt;p&gt;其他应该有很多例子，在实际工作中都会慢慢接触的。&lt;/p&gt;
+
+&lt;p&gt;最后一句：callback函数，很好，很重要。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>虚函数原理</title>
+      <link>http://localhost:1313/2015/11/09/virtual-function-cpp/</link>
+      <pubDate>Mon, 09 Nov 2015 23:20:53 JST</pubDate>
+      
+      <guid>http://localhost:1313/2015/11/09/virtual-function-cpp/</guid>
+      <description>
+
+&lt;p&gt;我们都知道：子类继承父类的虚函数后，用父类指针可以调用子类函数，这也是实现多态的前提。&lt;/p&gt;
+
+&lt;p&gt;那么，C++是怎么实现这个特性的呢？
+看看虚函数表的初始化过程，就不难理解其原理了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/polymorphism.jpg&#34; alt=&#34;多态、polymorphism&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;虚函数表的诞生:eb4eb720a450626098076a2276f7ac61&#34;&gt;虚函数表的诞生&lt;/h3&gt;
+
+&lt;p&gt;在C++的对象里，如果我们定义了虚函数，编译器会在这个对象里自动增加一个数据成员：虚函数表(virtual function table)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class Person{
+    public:
+    virtual void sayHello(){printf(&amp;quot;Person hello&amp;quot;);}
+    virtual void smile(){printf(&amp;quot;Person smile&amp;quot;);}
+    private:
+    int m_nAge;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例如：上面Person类里定义了2个虚函数，那么Person的Object的内存布局应该如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/vtbl.jpg&#34; alt=&#34;图1：虚函数表的产生&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;在VS2005的watch窗口可以看到（__vfptr）：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/virtualtablebirth.jpg&#34; alt=&#34;图2：VS2005里看虚函数表&#34; /&gt;
+
+(成员变量没有初始化，所以是0xcccccccc)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class Student : public Person{
+    public:
+    virtual void smile(){printf(&amp;quot;Student smile&amp;quot;);}
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当子类继承父类的虚函数表后，子类内存布局如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/vtbl-student.jpg&#34; alt=&#34;图3：子类继承虚函数后虚函数表的变化&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/virtualtablechange.jpg&#34; alt=&#34;图4：VS2005看虚函数表的变化&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;这个变化过程是怎么实现的呢，let&amp;rsquo;s continue!&lt;/p&gt;
+
+&lt;h3 id=&#34;虚函数表的初始化过程:eb4eb720a450626098076a2276f7ac61&#34;&gt;虚函数表的初始化过程&lt;/h3&gt;
+
+&lt;p&gt;有父类的对象，先由父类初始化数据成员，然后由子类初始化数据成员。&lt;/p&gt;
+
+&lt;p&gt;所以，Student::Student()函数之前，会执行Person::Person（）函数：将虚函数表里都写上了Person的函数；
+而Student类继承了smile函数，所以会在Student::Student（）里将Person::smile()
+替换(覆盖)成Student::smile()的地址（也就是图3里红色部分）。&lt;/p&gt;
+
+&lt;p&gt;由于虚函数表位于C++对象内存布局的最前面，所以即使是父类的指针，也能访问到虚函数表。
+通过父类指针调用虚函数表里函数的时候，只是根据函数的类型到相应位置取出函数地址，
+而不会关心这个函数是父类的还是子类的。&lt;/p&gt;
+
+&lt;p&gt;算是偷梁换柱吧:-)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/img/virtualtablesummary.jpg&#34; alt=&#34;图5：虚函数表的初始化过程&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>C语言中static的用法举例</title>
+      <link>http://localhost:1313/2015/11/07/static-in-c/</link>
+      <pubDate>Sat, 07 Nov 2015 06:22:27 JST</pubDate>
+      
+      <guid>http://localhost:1313/2015/11/07/static-in-c/</guid>
+      <description>
+
+&lt;p&gt;C语言中static主要有以下用途。 分别举例说明一下。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;static局部变量&lt;/li&gt;
+&lt;li&gt;static全局变量&lt;/li&gt;
+&lt;li&gt;static函数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;static局部变量:912a3409b2a9515793b0ede36f25b520&#34;&gt;static局部变量&lt;/h3&gt;
+
+&lt;p&gt;普通的函数内局部变量的内存来自stack，
+局部变量前加static，它的内存就不来自stack了，而是来自heap(①)。也就导致这个变量的生命期边长了：
+程序启动时这个变量就被初始化，程序退出时，其内存才被收回。&lt;/p&gt;
+
+&lt;p&gt;(①):应该是heap，抱歉这点暂时没有仔细研究。不知道和动态内存申请用的heap有何区别。&lt;/p&gt;
+
+&lt;p&gt;另外，普通变量内存来自stack，也就决定了你不能申请size太大的局部变量。过大的话，编译器就报错了。&lt;/p&gt;
+
+&lt;p&gt;举例：循环调用下面的函数，其函数返回值从0开始每次加1.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;int getValue()
+{
+	static int x = 0;
+	return (x++);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这么做有什么用呢？举个实际例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;struct DbInfo{
+	int x;
+	int y;
+}
+int pDbInfo getValueFromDatabase(int key)
+{
+	static DbInfo* pDbInfo = NULL;
+	static int nDbInfo = 0;
+	if(NULL== pDbInfo)
+	{
+		getInfoFromDb(&amp;amp;pDbInfo);
+	}
+	for(int i=0 ;i &amp;lt; nDbInfo; i++)
+	{
+		if(key == pDbInfo[i].x)
+		{
+			return pDbInfo[i].y;
+		}
+	}
+	return -1;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面例子里，static变量保存了第一次从数据库得到的信息，可以防止重复访问数据库。
+一点注意事项：如果是多线程环境下访问这个函数，就需要用信号量之类保护了。&lt;/p&gt;
+
+&lt;h3 id=&#34;static全局变量:912a3409b2a9515793b0ede36f25b520&#34;&gt;static全局变量&lt;/h3&gt;
+
+&lt;p&gt;全局变量和static局部变量的生命期相同，但是可见范围是整个程序。
+全局变量用static修饰之后，它的可见范围变为所在文件。
+这也算是C控制访问数据级别的一个方法吧。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;static int g_nInstanceNum = 0;
+int main()
+{
+	return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上定义一个static全局变量，即使在别的文件里用extern声明这个变量，链接器（linker）也会提示找不到。&lt;/p&gt;
+
+&lt;h3 id=&#34;static函数:912a3409b2a9515793b0ede36f25b520&#34;&gt;static函数&lt;/h3&gt;
+
+&lt;p&gt;和static全局变量类似，该函数的可见范围编程所在文件。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

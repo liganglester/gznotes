@@ -1,0 +1,16 @@
+	<div class="tags-list">
+		<div class="common-title">tags:</div>
+		<ul>
+		{{ range $key, $value := .Site.Taxonomies.tags.ByCount }}
+			<li>
+				<a href="/tags/{{.Name|urlize}}">
+				{{if eq .Name "c/c"}}
+					{{"c/c++"}}
+				{{else}}
+					{{.Name}}
+				{{end}}
+				</a><!--{{.Count}}-->
+			</li>
+		{{end}}
+		</ul>
+	</div>

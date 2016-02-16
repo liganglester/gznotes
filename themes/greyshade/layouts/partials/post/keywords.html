@@ -1,0 +1,11 @@
+{{ if .Keywords }}
+{{ $len := .Keywords|len }}
+{{ range $idx, $keyword := .Keywords }}
+	{{ $i := add $idx 1 }}
+	{{ if lt $i $len }}
+		{{ $keyword }},
+	{{ else }}
+	    {{ $keyword }}
+	{{ end }}
+{{ end }}
+{{ end }}

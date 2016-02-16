@@ -1,0 +1,29 @@
+<article class="post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<h3 class="title" itemprop="name"><a href="{{ .Permalink }}" itemprop="url">{{ if $.Site.Params.titlecase }}{{ .Title | title }}{{ else }}{{ .Title }}{{ end }}</a></h3>
+    <div class="meta">
+		{{ partial "post/date.html" . }}
+		{{ if .Params.tags }}
+			<div class="tags">{{ partial "post/tags.html" . }}</div>
+		{{ end }}
+		{{ if .Params.series }}
+			<div class="tags">{{ partial "post/series.html" . }}</div>
+		{{ end }}
+	</div>
+	
+	<div class="entry-content" style="clear:both" itemprop="articleBody">
+		<!--{{ with .Params.featured_image }}<img class="feature-pic" src="{{ . }}">{{ end }}-->
+		{{ .Summary }}
+		
+		<div class="read-more">
+		{{ if .Truncated }}
+			<a  href="{{ .Permalink }}" >
+				{{ if $.Site.Params.excerpt_link }}
+					{{ $.Site.Params.excerpt_link }}
+				{{ else }}
+					阅读全文 →
+				{{ end }}
+			</a>
+		{{ end }}
+		</div>
+	</div>
+</article>

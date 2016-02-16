@@ -1,0 +1,1 @@
+hugo server --theme=greyshade --buildDrafts --watch -d dev

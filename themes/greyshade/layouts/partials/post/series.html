@@ -1,0 +1,11 @@
+{{ if .Params.series }}
+{{ $len := .Params.series|len }}
+{{ range $idx, $series := .Params.series }}
+	{{ $i := add $idx 1 }}
+	{{ if lt $i $len }}
+		<a href="{{ $.Site.BaseURL }}/series/{{ $series | urlize }}"> {{ $series }} </a>,
+	{{ else }}
+	    <a href="{{ $.Site.BaseURL }}/series/{{ $series | urlize }}"> {{ $series }} </a>
+	{{ end }}
+{{ end }}
+{{ end }}

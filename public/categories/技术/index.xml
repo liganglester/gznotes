@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>技术 on 钢子笔记 </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://gznotes.net/categories/%E6%8A%80%E6%9C%AF/</link>
+    <language>zh-cn</language>
+    
+    
+    <updated>Sat, 06 Feb 2016 23:02:50 JST</updated>
+    
+    <item>
+      <title>Static控件的一个隐蔽特性</title>
+      <link>http://gznotes.net/2016/02/06/static-notify/</link>
+      <pubDate>Sat, 06 Feb 2016 23:02:50 JST</pubDate>
+      
+      <guid>http://gznotes.net/2016/02/06/static-notify/</guid>
+      <description>
+
+&lt;p&gt;Static控件常用来显示文字列，一般不会和用户有别的交互。&lt;/p&gt;
+
+&lt;p&gt;但是，从WindowsVista之后，多了了一个很多人不知道的功能：&lt;br&gt;双击带有SS_NOTIFY属性的Static控件，windows会将Static内容copy到剪贴板。&lt;/p&gt;
+
+&lt;h2 id=&#34;到底怎么回事:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;到底怎么回事？&lt;/h2&gt;
+
+&lt;p&gt;一个带有SS_NOTIFY属相的Static控件，比较常见的处理是:&lt;br&gt;在收到WS_LBUTTONDBLCLK消息后，向父窗口发WM_COMMAND告知自己被双击(STN_DBLCLK)。&lt;/p&gt;
+
+&lt;p&gt;在Vista之后，还会GetWindowText()得到Static的文字列，放到剪贴板里。
+挺贴心，不过有点隐蔽。有时候也添了点小麻烦。&lt;/p&gt;
+
+&lt;h2 id=&#34;一点麻烦:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;一点麻烦&lt;/h2&gt;
+
+&lt;p&gt;在Vista之前开发的软件，有的是依赖双击Static后Static向父窗口发的WM_COMMAND来弹出其他画面的。
+那么，下面的情况就让用户有点意外了：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在其他程序里copy一点内容&lt;/li&gt;
+&lt;li&gt;双击Static&lt;/li&gt;
+&lt;li&gt;在新打开的画面粘贴刚刚copy的内容&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;上面第3部贴出来的是Static的文字列，用户就会抱怨：这是肿么回事呢？？&lt;/p&gt;
+
+&lt;h2 id=&#34;怎么解决:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;怎么解决？&lt;/h2&gt;
+
+&lt;p&gt;虽说这是微软加的功能，但是客户如果不喜欢，就得想办法解决。&lt;/p&gt;
+
+&lt;p&gt;简单讲就是将Static控件的消息处理函数(WndProc)替换成自己写的。
+在自己写的WndProc里，对WS_LBUTTONDBLCLK做特殊处理。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;BOOL disableCopyOnDblClickStatic(HANDLE hStatic)
+{
+	// 得到默认的WndProc
+	WNDPROC pOldWndProc = (WNDPROC)GetWindowLong(hStatic, GWL_WNDPROC);
+	// 让Static自己管理这个默认WndProc：这样在新WndProc里，就可以得到了。
+	SetWindowProc(hStatic,GWL_USERDATA, (LONG)pOldWndProc);
+
+	// 下面newWndProc是给Static新写的WndProc，
+	// 收到WS_LBUTTONDBLCLK后，只给父窗口发个WM_COMMAND就直接返回。
+	// 其他消息通过CallWndProc函数继续使用windows默认处理
+	SetWindowProc(hStatic,GWL_WNDPROC, (LONG)newWndProc);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;这么修改的优缺点:dc6047e2f849f9f1b53b738904bb61f6&#34;&gt;这么修改的优缺点&lt;/h2&gt;
+
+&lt;p&gt;缺点：需要针对每个有问题的Static控件进行修改。&lt;/p&gt;
+
+&lt;p&gt;优点：打击面不会太大，因为不能保证所有画面里，这个动作都被认为是bug(那样的话，就显得微软太蠢了哈。。)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用javascript&#43;cookie判断用户是否首次访问网站</title>
+      <link>http://gznotes.net/2015/12/07/javascript-new-visitor/</link>
+      <pubDate>Mon, 07 Dec 2015 11:33:43 JST</pubDate>
+      
+      <guid>http://gznotes.net/2015/12/07/javascript-new-visitor/</guid>
+      <description>
+
+&lt;p&gt;有时，针对首次访问网站的用户，需要弹出特定的消息。
+比如：本网站做了一个“向首次访问的用户做问卷调查”功能。&lt;/p&gt;
+
+&lt;p&gt;实现方法：
+在cookie里记录用户是否访问过的信息。通过javascript读写cookie。&lt;/p&gt;
+
+&lt;h2 id=&#34;什么是cookie:a1026216791776b42e031d658490c506&#34;&gt;什么是cookie？&lt;/h2&gt;
+
+&lt;p&gt;从安全角度考虑浏览器是不能直接写本地硬盘的。
+不过有些信息需要本地保存，就发明了cookie这么个东西。
+浏览器写入cookie的信息大小，可以写的cookie个数都有限制。
+另外，cookie是可以设置期限的。例如：30天期限的话，30天后这个cookie就无效了（被删除了吧）。&lt;/p&gt;
+
+&lt;p&gt;cookie的详细信息就请教google吧。&lt;/p&gt;
+
+&lt;h2 id=&#34;一个实现细节:a1026216791776b42e031d658490c506&#34;&gt;一个实现细节&lt;/h2&gt;
+
+&lt;p&gt;我在实现该功能的时候，仅当访客滚动页面快到底部时，才去判断用户是否首次访问。
+如果是首次访问，就弹出对话框（DIV）询问是否愿意配合做&lt;a href=&#34;https://www.wenjuan.com/s/AFbMJj/&#34;&gt;问卷调查&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;代码:a1026216791776b42e031d658490c506&#34;&gt;代码&lt;/h2&gt;
+
+&lt;p&gt;闲话少说吧，具体内容参见注释。
+如果有没写清楚地，麻烦留言。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+	// 绑定在页面滚动时间上的处理函数。每当用户滚动页面，这个函数都会被调用。
+	$(window).scroll(function() {
+		var bottom = $(document).height() - $(window).height();
+		var position = $(this).scrollTop();
+		if(position &amp;gt; 900 || // 仅当访客已经滚动一定范围（阅读一些内容）后
+		position &amp;gt; bottom*0.67 ) //当页面较小时，按照比例算
+		{
+			var newVisitor = isNewVisitor();// 如果是新访客
+			if(newVisitor === true)
+			{
+				// 动画弹出消息框
+				$(&amp;quot;#invite-questionnaire&amp;quot;).animate({right:&amp;quot;0&amp;quot;, bottom:&amp;quot;0&amp;quot;}, 100);
+
+				// 标记：已经向该访客弹出过消息。30天之内不要再弹
+				setCookie(&amp;quot;gznotes-visited&amp;quot;,&amp;quot;true&amp;quot;, 30);
+			}
+		}
+	});
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;	// 访客点击“没空”后，用这个函数隐藏消息框
+	function hideQuestionnaire()
+	{
+		$(&amp;quot;#invite-questionnaire&amp;quot;).css(&amp;quot;display&amp;quot;,&amp;quot;none&amp;quot;);
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function isNewVisitor() {
+    // 从cookie读取“已经向访客提示过消息”的标志位
+    var flg = getCookie(&amp;quot;gznotes-visited&amp;quot;);
+    if (flg === &amp;quot;&amp;quot;) {
+        return true;
+    } else {
+        return false;
+    }
+}
+// 写cookie
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = &amp;quot;expires=&amp;quot;+d.toUTCString();
+    document.cookie = cname + &amp;quot;=&amp;quot; + cvalue + &amp;quot;; &amp;quot; + expires +&amp;quot;;path=/&amp;quot;;
+} 
+// 读cookie
+function getCookie(cname) {
+    var name = cname + &amp;quot;=&amp;quot;;
+    var ca = document.cookie.split(&#39;;&#39;);
+    for(var i=0; i&amp;lt;ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==&#39; &#39;) c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return &amp;quot;&amp;quot;;
+} 
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>回调(callback)函数简介</title>
+      <link>http://gznotes.net/2015/11/19/callback-function/</link>
+      <pubDate>Thu, 19 Nov 2015 06:22:27 JST</pubDate>
+      
+      <guid>http://gznotes.net/2015/11/19/callback-function/</guid>
+      <description>
+
+&lt;p&gt;callback函数在软件设计中被广泛使用。可以说没有他就没有各种灵活的软件结构。
+什么是callback函数？有哪些常见用法？&lt;/p&gt;
+
+&lt;h2 id=&#34;什么是callback函数:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;什么是callback函数&lt;/h2&gt;
+
+&lt;p&gt;callback函数打个比方就是“卧底”。
+即：A模块定义函数f，交给B模块调用。B模块掌握调用f的时机。f执行时与A模块有信息交互。&lt;/p&gt;
+
+&lt;p&gt;一般来讲，因为f定义于A，所以会了解A的部分内部数据结构，也就方便其在执行时更新数据。&lt;/p&gt;
+
+&lt;p&gt;当然，这只是一种可能性，f执行时也可能仅仅是向A发条消息就return了。&lt;/p&gt;
+
+&lt;h2 id=&#34;举例1-windows的消息处理函数:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;举例1：windows的消息处理函数&lt;/h2&gt;
+
+&lt;p&gt;写过win32画面程序的同学应该都知道，我们写画面程序需要定义一个windowProc函数，处理windows消息。
+这个函数就是一个callback函数。&lt;/p&gt;
+
+&lt;p&gt;这个函数使我们的程序定义的，通过RegisterClass()函数将这个windowProc函数登录到windows系统。
+windows系统在收到和我们窗口相关的消息时，就会调用我们提供的windowProc函数。&lt;/p&gt;
+
+&lt;h2 id=&#34;举例2-避免模块间循环依赖:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;举例2：避免模块间循环依赖&lt;/h2&gt;
+
+&lt;p&gt;软件系统有很多是分层的，像是积木一样一层一层。。
+一般来讲，都是上层利用下层的服务，调用下层提供的API。&lt;/p&gt;
+
+&lt;p&gt;但是个别情况，下层也可能调用上层API，这样两个模块就循环依赖了！&lt;/p&gt;
+
+&lt;p&gt;这个时候callback的解决办法是：下层提供一个callback登录函数，让上层提供一个callback函数。
+这样形式上仍然是上层依赖下层，而下层就可以通过callback函数利用上层的服务了。&lt;/p&gt;
+
+&lt;h2 id=&#34;举例3-c-的event:a4282e720ad4b24a43241c1d2daaf3fd&#34;&gt;举例3： C#的event&lt;/h2&gt;
+
+&lt;p&gt;最近学了一点C#，发现画面类支持登录event，语法非常简单，记不清了，类似于这样吧：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;form.clickOK += handleOK()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;handleOK()是业务层定义的函数。&lt;/p&gt;
+
+&lt;p&gt;这样，画面层就可以在不了解业务层的前提下，将画面时间传递给业务层了！&lt;/p&gt;
+
+&lt;p&gt;要知道，“不知道”这件事在软件设计中很重要。也就是所谓的“关心分离” Separation of concerns.
+各管各的，能不知道的一定不要知道，信息知道多了也就是有耦合了，给bug提供了温床。&lt;/p&gt;
+
+&lt;p&gt;其他应该有很多例子，在实际工作中都会慢慢接触的。&lt;/p&gt;
+
+&lt;p&gt;最后一句：callback函数，很好，很重要。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>什么时候需要订阅RSS？</title>
+      <link>http://gznotes.net/2015/11/16/what-is-rss/</link>
+      <pubDate>Mon, 16 Nov 2015 21:42:29 JST</pubDate>
+      
+      <guid>http://gznotes.net/2015/11/16/what-is-rss/</guid>
+      <description>
+
+&lt;p&gt;简单讲，RSS是一种PULL方式的信息取得机制。
+如果你喜欢某网站的文章，但是又不想总来check有没有新文章，这个时候，订阅RSS就比较合适了。
+在浏览器自带的，或者专用的RSS Reader里就可以随时看到该网站最新的信息。&lt;/p&gt;
+
+&lt;h3 id=&#34;firefox里rss-reader的使用方法:163764c1ea2a98a424ec95eed0214ded&#34;&gt;Firefox里RSS Reader的使用方法&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://gznotes.net/img/firefox-rss.jpg&#34; class=&#34;intext-left&#34;&gt;
+点击该网站的RSS订阅链接后，Firefox会提示是否订阅。
+订阅网站RSS后，在bookmark栏上增加了一个菜单项，类似于普通的bookmark。&lt;/p&gt;
+
+&lt;p&gt;点开后上面是文章列表，如图。灰色的是已经读过的。&lt;/p&gt;
+
+&lt;p&gt;以后随时点下这个bookmark就可以看到最新文章列表啦。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>虚函数原理</title>
+      <link>http://gznotes.net/2015/11/09/virtual-function-cpp/</link>
+      <pubDate>Mon, 09 Nov 2015 23:20:53 JST</pubDate>
+      
+      <guid>http://gznotes.net/2015/11/09/virtual-function-cpp/</guid>
+      <description>
+
+&lt;p&gt;我们都知道：子类继承父类的虚函数后，用父类指针可以调用子类函数，这也是实现多态的前提。&lt;/p&gt;
+
+&lt;p&gt;那么，C++是怎么实现这个特性的呢？
+看看虚函数表的初始化过程，就不难理解其原理了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://gznotes.net/img/polymorphism.jpg&#34; alt=&#34;多态、polymorphism&#34; /&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;虚函数表的诞生:eb4eb720a450626098076a2276f7ac61&#34;&gt;虚函数表的诞生&lt;/h3&gt;
+
+&lt;p&gt;在C++的对象里，如果我们定义了虚函数，编译器会在这个对象里自动增加一个数据成员：虚函数表(virtual function table)。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class Person{
+    public:
+    virtual void sayHello(){printf(&amp;quot;Person hello&amp;quot;);}
+    virtual void smile(){printf(&amp;quot;Person smile&amp;quot;);}
+    private:
+    int m_nAge;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;例如：上面Person类里定义了2个虚函数，那么Person的Object的内存布局应该如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://gznotes.net/img/vtbl.jpg&#34; alt=&#34;图1：虚函数表的产生&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;在VS2005的watch窗口可以看到（__vfptr）：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://gznotes.net/img/virtualtablebirth.jpg&#34; alt=&#34;图2：VS2005里看虚函数表&#34; /&gt;
+
+(成员变量没有初始化，所以是0xcccccccc)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class Student : public Person{
+    public:
+    virtual void smile(){printf(&amp;quot;Student smile&amp;quot;);}
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当子类继承父类的虚函数表后，子类内存布局如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://gznotes.net/img/vtbl-student.jpg&#34; alt=&#34;图3：子类继承虚函数后虚函数表的变化&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://gznotes.net/img/virtualtablechange.jpg&#34; alt=&#34;图4：VS2005看虚函数表的变化&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;这个变化过程是怎么实现的呢，let&amp;rsquo;s continue!&lt;/p&gt;
+
+&lt;h3 id=&#34;虚函数表的初始化过程:eb4eb720a450626098076a2276f7ac61&#34;&gt;虚函数表的初始化过程&lt;/h3&gt;
+
+&lt;p&gt;有父类的对象，先由父类初始化数据成员，然后由子类初始化数据成员。&lt;/p&gt;
+
+&lt;p&gt;所以，Student::Student()函数之前，会执行Person::Person（）函数：将虚函数表里都写上了Person的函数；
+而Student类继承了smile函数，所以会在Student::Student（）里将Person::smile()
+替换(覆盖)成Student::smile()的地址（也就是图3里红色部分）。&lt;/p&gt;
+
+&lt;p&gt;由于虚函数表位于C++对象内存布局的最前面，所以即使是父类的指针，也能访问到虚函数表。
+通过父类指针调用虚函数表里函数的时候，只是根据函数的类型到相应位置取出函数地址，
+而不会关心这个函数是父类的还是子类的。&lt;/p&gt;
+
+&lt;p&gt;算是偷梁换柱吧:-)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://gznotes.net/img/virtualtablesummary.jpg&#34; alt=&#34;图5：虚函数表的初始化过程&#34; /&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>关于对话框中单选框焦点设定的一点调查</title>
+      <link>http://gznotes.net/2015/11/07/radio-focus-in-dialog/</link>
+      <pubDate>Sat, 07 Nov 2015 06:27:54 JST</pubDate>
+      
+      <guid>http://gznotes.net/2015/11/07/radio-focus-in-dialog/</guid>
+      <description>
+
+&lt;p&gt;对话框中单选框(radio button)的焦点控制，有点说道。&lt;/p&gt;
+
+&lt;p&gt;比如，调用SetCheck()并不能让其完全处于选中状态，和手动点击达到的效果不同。&lt;/p&gt;
+
+&lt;h3 id=&#34;对话框的消息处理函数-dialog-proc-返回值:04aade06df32a32d87036425c0a6b3de&#34;&gt;对话框的消息处理函数（dialog  proc）返回值&lt;/h3&gt;
+
+&lt;p&gt;此函数返回值只有一个意思： 返回TRUE是告诉windows操作系统，把默认焦点设置到对话框资源（RC）文件里的第一个控件上。
+对话框的RC文件是一个文本文件，修改控件在这个文件里的先后位置，也就可以修改画面初期显示后的默认焦点所在控件。&lt;/p&gt;
+
+&lt;p&gt;不过，如果在dialog proc里，你通过SetFocus（）将焦点设置到别的控件上，就应该返回FALSE。否则操作系统还是会将焦点设置到第一个空间上。&lt;/p&gt;
+
+&lt;h3 id=&#34;对话框的消息处理函数-dialog-proc-返回值-1:04aade06df32a32d87036425c0a6b3de&#34;&gt;对话框的消息处理函数（dialog proc）返回值&lt;/h3&gt;
+
+&lt;p&gt;单选框（radio button）的焦点设定比较容易出问题。因为有时候视觉上radio button被选上了，但是一些内部状态没有设置，系统内部并不认为它被选上了，也就进一步影响按tab键时焦点的切换。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;BM_SETCHECK只能让radio在视觉上变成选中状态,但实际上和通过点击达到的选中状态还是不同的。&lt;/li&gt;
+&lt;li&gt;调用SetFocus()把焦点设置到这个radio button上，也仍然达不到手动鼠标点击实现的选中状态。这一点可以通过tab键提供焦点时，焦点的移动方式不同来证实。&lt;/li&gt;
+&lt;li&gt;只有鼠标点击，才能让一个radio button处于完全的选中状态。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;tab和4个arrow键在切换空间焦点操作上的作用并不相同:04aade06df32a32d87036425c0a6b3de&#34;&gt;Tab和4个Arrow键在切换空间焦点操作上的作用并不相同&lt;/h3&gt;
+
+&lt;p&gt;Arrow可以在一个radio button group内移动焦点，而tab在更大的范围内。比如一个radio已经选上了，那么按tab键焦点就不会走到其之下的radio，而是跳过下面未选中的radio，走到这个radio group之下的控件。在切回到radio group的时候，焦点也只会在那个选中的radio停留。想在group内的各个radio之间移动，可以用四个Arrow键。&lt;/p&gt;
+
+&lt;p&gt;上述内容主要参考这段的&lt;a href=&#34;https://msdn.microsoft.com/en-us/library/windows/desktop/ms645469(v=vs.85).aspx&#34;&gt;MSDN描述&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>C语言中static的用法举例</title>
+      <link>http://gznotes.net/2015/11/07/static-in-c/</link>
+      <pubDate>Sat, 07 Nov 2015 06:22:27 JST</pubDate>
+      
+      <guid>http://gznotes.net/2015/11/07/static-in-c/</guid>
+      <description>
+
+&lt;p&gt;C语言中static主要有以下用途。 分别举例说明一下。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;static局部变量&lt;/li&gt;
+&lt;li&gt;static全局变量&lt;/li&gt;
+&lt;li&gt;static函数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;static局部变量:912a3409b2a9515793b0ede36f25b520&#34;&gt;static局部变量&lt;/h3&gt;
+
+&lt;p&gt;普通的函数内局部变量的内存来自stack，
+局部变量前加static，它的内存就不来自stack了，而是来自heap(①)。也就导致这个变量的生命期边长了：
+程序启动时这个变量就被初始化，程序退出时，其内存才被收回。&lt;/p&gt;
+
+&lt;p&gt;(①):应该是heap，抱歉这点暂时没有仔细研究。不知道和动态内存申请用的heap有何区别。&lt;/p&gt;
+
+&lt;p&gt;另外，普通变量内存来自stack，也就决定了你不能申请size太大的局部变量。过大的话，编译器就报错了。&lt;/p&gt;
+
+&lt;p&gt;举例：循环调用下面的函数，其函数返回值从0开始每次加1.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;int getValue()
+{
+	static int x = 0;
+	return (x++);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这么做有什么用呢？举个实际例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;struct DbInfo{
+	int x;
+	int y;
+}
+int pDbInfo getValueFromDatabase(int key)
+{
+	static DbInfo* pDbInfo = NULL;
+	static int nDbInfo = 0;
+	if(NULL== pDbInfo)
+	{
+		getInfoFromDb(&amp;amp;pDbInfo);
+	}
+	for(int i=0 ;i &amp;lt; nDbInfo; i++)
+	{
+		if(key == pDbInfo[i].x)
+		{
+			return pDbInfo[i].y;
+		}
+	}
+	return -1;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面例子里，static变量保存了第一次从数据库得到的信息，可以防止重复访问数据库。
+一点注意事项：如果是多线程环境下访问这个函数，就需要用信号量之类保护了。&lt;/p&gt;
+
+&lt;h3 id=&#34;static全局变量:912a3409b2a9515793b0ede36f25b520&#34;&gt;static全局变量&lt;/h3&gt;
+
+&lt;p&gt;全局变量和static局部变量的生命期相同，但是可见范围是整个程序。
+全局变量用static修饰之后，它的可见范围变为所在文件。
+这也算是C控制访问数据级别的一个方法吧。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;static int g_nInstanceNum = 0;
+int main()
+{
+	return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如上定义一个static全局变量，即使在别的文件里用extern声明这个变量，链接器（linker）也会提示找不到。&lt;/p&gt;
+
+&lt;h3 id=&#34;static函数:912a3409b2a9515793b0ede36f25b520&#34;&gt;static函数&lt;/h3&gt;
+
+&lt;p&gt;和static全局变量类似，该函数的可见范围编程所在文件。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
